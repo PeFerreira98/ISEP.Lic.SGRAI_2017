@@ -14,13 +14,19 @@ void stats(Tanque *t)
 	}
 }
 
-bool shoot(Tanque *t)
+void shoot(Tanque *t)
 {
-	if (t->IsReloading) return false;
+	if (t->IsReloading)
+	{
+		return;
+	}
 
 	// find available space
 	int i = 0;
-	while (t->bullets[i].IsAlive && i < NUM_BULLETS) i++;
+	while (t->bullets[i].IsAlive && i < NUM_BULLETS)
+	{
+		i++;
+	}
 
 	// set start values
 	t->bullets[0].angulo = t->angCanhao;
@@ -36,8 +42,6 @@ bool shoot(Tanque *t)
 	// set reload
 	t->IsReloading = true;
 	t->reloadCounter = RELOAD_TIME;
-
-	return true;
 }
 
 

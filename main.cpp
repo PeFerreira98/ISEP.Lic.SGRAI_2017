@@ -8,6 +8,7 @@
 Estado estado;
 Modelo model;
 
+
 //char mazedata[MAZE_HEIGHT][MAZE_WIDTH + 1] = {
 //  "                  ",
 //  " ******* ******** ",
@@ -30,9 +31,9 @@ Modelo model;
 //};
 
 
-
 ////////////////////////////////////
 //// Iluminação e materiais
+
 
 void setLight()
 {
@@ -56,6 +57,8 @@ void setLight()
 
 void setMaterial()
 {
+	glColor4f(1, 1, 1, 1);
+
 	GLfloat mat_specular[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 	GLfloat mat_shininess = 104;
 
@@ -67,7 +70,6 @@ void setMaterial()
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
 }
-
 
 
 ///////////////////////////////////
@@ -86,6 +88,7 @@ void reshapePlayerSubwindow(int janela, int width, int height)
 	// Matriz Modelview
 	// Matriz onde são realizadas as tranformacoes dos modelos desenhados
 	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }
 
 void reshapePlayer1Subwindow(int width, int height)
@@ -129,12 +132,103 @@ void strokeCenterString(char *str, double x, double y, double z, double s)
 }
 
 
-
 /////////////////////////////////////
 //Modelo
 
-GLboolean detectaColisao(GLfloat nx, GLfloat nz)
+GLboolean detectaColisaoBala(Bullet b, GLfloat nx, GLfloat nz, Tanque t)
 {
+
+	if (model.mapa.mapa[(int)(nx + 9 + 0.6)][(int)(nz + 9 + 0.6)] >= '*') {
+		b.IsAlive = false;
+
+		return GL_TRUE;
+	}
+	else if (b.x + RAIO_BULLET > t.x - (COMPRIMENTO_BASE / 2.0 * cos(RAD(t.direccao + t.angTorre + 90)))
+		&& b.x + RAIO_BULLET < t.x + (COMPRIMENTO_BASE / 2.0 * cos(RAD(t.direccao + t.angTorre + 90)))
+		&& b.x + RAIO_BULLET > t.x - (LARGURA_BASE / 2.0 * sin(RAD(t.direccao + t.angTorre + 90)))
+		&& b.x + RAIO_BULLET < t.x + (LARGURA_BASE / 2.0 * sin(RAD(t.direccao + t.angTorre + 90)))
+		&& b.x + RAIO_BULLET < t.y + ((ALTURA_BASE + ALTURA_TORRE) / 2.0)
+		&& b.x + RAIO_BULLET > t.y - ((ALTURA_BASE + ALTURA_TORRE) / 2.0)
+		&& b.y + RAIO_BULLET > t.x - (COMPRIMENTO_BASE / 2.0 * cos(RAD(t.direccao + t.angTorre + 90)))
+		&& b.y + RAIO_BULLET < t.x + (COMPRIMENTO_BASE / 2.0 * cos(RAD(t.direccao + t.angTorre + 90)))
+		&& b.y + RAIO_BULLET > t.x - (LARGURA_BASE / 2.0 * sin(RAD(t.direccao + t.angTorre + 90)))
+		&& b.y + RAIO_BULLET < t.x + (LARGURA_BASE / 2.0 * sin(RAD(t.direccao + t.angTorre + 90)))
+		&& b.y + RAIO_BULLET < t.y + ((ALTURA_BASE + ALTURA_TORRE) / 2.0)
+		&& b.y + RAIO_BULLET > t.y - ((ALTURA_BASE + ALTURA_TORRE) / 2.0)
+		&& b.x - RAIO_BULLET > t.x - (COMPRIMENTO_BASE / 2.0 * cos(RAD(t.direccao + t.angTorre + 90)))
+		&& b.x - RAIO_BULLET < t.x + (COMPRIMENTO_BASE / 2.0 * cos(RAD(t.direccao + t.angTorre + 90)))
+		&& b.x - RAIO_BULLET > t.x - (LARGURA_BASE / 2.0 * sin(RAD(t.direccao + t.angTorre + 90)))
+		&& b.x - RAIO_BULLET < t.x + (LARGURA_BASE / 2.0 * sin(RAD(t.direccao + t.angTorre + 90)))
+		&& b.x - RAIO_BULLET < t.y + ((ALTURA_BASE + ALTURA_TORRE) / 2.0)
+		&& b.x - RAIO_BULLET > t.y - ((ALTURA_BASE + ALTURA_TORRE) / 2.0)
+		&& b.y - RAIO_BULLET > t.x - (COMPRIMENTO_BASE / 2.0 * cos(RAD(t.direccao + t.angTorre + 90)))
+		&& b.y - RAIO_BULLET < t.x + (COMPRIMENTO_BASE / 2.0 * cos(RAD(t.direccao + t.angTorre + 90)))
+		&& b.y - RAIO_BULLET > t.x - (LARGURA_BASE / 2.0 * sin(RAD(t.direccao + t.angTorre + 90)))
+		&& b.y - RAIO_BULLET < t.x + (LARGURA_BASE / 2.0 * sin(RAD(t.direccao + t.angTorre + 90)))
+		&& b.y - RAIO_BULLET < t.y + ((ALTURA_BASE + ALTURA_TORRE) / 2.0)
+		&& b.y - RAIO_BULLET > t.y - ((ALTURA_BASE + ALTURA_TORRE) / 2.0)) {
+
+
+		// EXPLOSAO + MUDAR TEXTURA/ALTERAR SCORE
+
+	}
+
+	return GL_FALSE;
+}
+
+
+GLboolean detectaColisaoTanque(GLfloat nx, GLfloat nz, Tanque t)
+{
+	if (model.mapa.mapa[(int)(nx + 9 + 0.6)][(int)(nz + 9 + 0.6)] >= '*') {
+
+
+		return GL_TRUE;
+	}/*
+	 else if (t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+	 && t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+	 && t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+	 && t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+	 && t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.y + METADE_ALTURA
+	 &&  t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.y - METADE_ALTURA
+
+	 && t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+	 && t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+	 && t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+	 && t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+	 && t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.y + METADE_ALTURA
+	 &&  t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.y - METADE_ALTURA
+
+	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90)))< t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.y + METADE_ALTURA
+	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.y - METADE_ALTURA
+
+	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90)))< t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.y + METADE_ALTURA
+	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.y - METADE_ALTURA
+
+	 && t.y + METADE_ALTURA < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+	 && t.y + METADE_ALTURA > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+	 && t.y + METADE_ALTURA > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+	 && t.y + METADE_ALTURA < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+	 && t.y + METADE_ALTURA < t1.y + METADE_ALTURA
+	 && t.y + METADE_ALTURA > t1.y - METADE_ALTURA
+
+	 && t.y - METADE_ALTURA < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+	 && t.y - METADE_ALTURA > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+	 && t.y - METADE_ALTURA > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+	 && t.y - METADE_ALTURA < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+	 && t.y - METADE_ALTURA < t1.y + METADE_ALTURA
+	 && t.y - METADE_ALTURA > t1.y - METADE_ALTURA
+
+	 ) {
+	 return GL_TRUE;
+	 }*/
 
 	return GL_FALSE;
 }
@@ -164,7 +258,13 @@ void desenhaCubo(GLuint texID, GLfloat texS, GLfloat texT)
 	{ 0.5,-0.5,0.5 },
 	{ 0.5,0.5,0.5 },
 	{ -0.5,0.5,0.5 } };
-	GLfloat normais[][3] = { { 0,0,-1 },
+	GLfloat normais[][3] = {
+		{ 0,0,-1 },
+		{ 0,1,0 },
+		{ -1,0,0 },
+		{ 1,0,0 },
+		{ 0,0,1 },
+		{ 0,-1,0 }
 		// acrescentar as outras normais...
 	};
 
@@ -173,11 +273,11 @@ void desenhaCubo(GLuint texID, GLfloat texS, GLfloat texT)
 	GLfloat textCoord[] = { texS, texT };
 
 	desenhaPoligono(vertices[1], vertices[0], vertices[3], vertices[2], normais[0], textCoord);
-	desenhaPoligono(vertices[2], vertices[3], vertices[7], vertices[6], normais[0], textCoord);
-	desenhaPoligono(vertices[3], vertices[0], vertices[4], vertices[7], normais[0], textCoord);
-	desenhaPoligono(vertices[6], vertices[5], vertices[1], vertices[2], normais[0], textCoord);
-	desenhaPoligono(vertices[4], vertices[5], vertices[6], vertices[7], normais[0], textCoord);
-	desenhaPoligono(vertices[5], vertices[4], vertices[0], vertices[1], normais[0], textCoord);
+	desenhaPoligono(vertices[2], vertices[3], vertices[7], vertices[6], normais[1], textCoord);
+	desenhaPoligono(vertices[3], vertices[0], vertices[4], vertices[7], normais[2], textCoord);
+	desenhaPoligono(vertices[6], vertices[5], vertices[1], vertices[2], normais[3], textCoord);
+	desenhaPoligono(vertices[4], vertices[5], vertices[6], vertices[7], normais[4], textCoord);
+	desenhaPoligono(vertices[5], vertices[4], vertices[0], vertices[1], normais[5], textCoord);
 
 	glBindTexture(GL_TEXTURE_2D, NULL);
 }
@@ -190,82 +290,82 @@ void desenhaCubo() // default
 //void desenhaBussola(int width, int height)  // largura e altura da janela
 //{
 
-	// Altera viewport e projecção para 2D (copia de um reshape de um projecto 2D)
+// Altera viewport e projecção para 2D (copia de um reshape de um projecto 2D)
 
-	//....
+//....
 
-	// Blending (transparencias)
-  /*  glEnable(GL_BLEND);
-	  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-	  glDisable(GL_LIGHTING);
-	  glDisable(GL_DEPTH_TEST);
-	  glDisable(GL_COLOR_MATERIAL);
-  */
+// Blending (transparencias)
+/*  glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+glDisable(GL_LIGHTING);
+glDisable(GL_DEPTH_TEST);
+glDisable(GL_COLOR_MATERIAL);
+*/
 
-  //desenha bussola 2D
+//desenha bussola 2D
 
-	//glColor3f(1,0.4,0.4);
-	//strokeCenterString("N", 0, 20, 0 , 0.1); // string, x ,y ,z ,scale
+//glColor3f(1,0.4,0.4);
+//strokeCenterString("N", 0, 20, 0 , 0.1); // string, x ,y ,z ,scale
 
 
-  // ropõe estado
- /* glDisable(GL_BLEND);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_DEPTH_TEST);
+// ropõe estado
+/* glDisable(GL_BLEND);
+glEnable(GL_LIGHTING);
+glEnable(GL_COLOR_MATERIAL);
+glEnable(GL_DEPTH_TEST);
 */
 
 //repõe projecção chamando redisplay
-	//reshapeNavigateSubwindow(width, height);
+//reshapeNavigateSubwindow(width, height);
 
 //}
 
 //void desenhaModeloDir(objecto_t obj, int width, int height)
 //{
-	// Altera viewport e projecção
-  //....
+// Altera viewport e projecção
+//....
 
-	// Blending (transparencias)
-  /*
-	glEnable(GL_BLEND);
-	  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-	  glDisable(GL_LIGHTING);
-	  glDisable(GL_DEPTH_TEST);
-  */
+// Blending (transparencias)
+/*
+glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+glDisable(GL_LIGHTING);
+glDisable(GL_DEPTH_TEST);
+*/
 
-  //desenha Seta
+//desenha Seta
 
-  // ropõe estado
+// ropõe estado
 /*  glDisable(GL_BLEND);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_DEPTH_TEST);
+glEnable(GL_LIGHTING);
+glEnable(GL_DEPTH_TEST);
 */
 //repõe projecção chamando redisplay
-	//reshapeTopSubwindow(width, height);
+//reshapeTopSubwindow(width, height);
 //}
 
 //void desenhaAngVisao(Camera *cam)
 //{
-	//GLfloat ratio;
-	//ratio = (GLfloat)glutGet(GLUT_WINDOW_WIDTH) / glutGet(GLUT_WINDOW_HEIGHT); // proporção 
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glDepthMask(GL_FALSE);
+//GLfloat ratio;
+//ratio = (GLfloat)glutGet(GLUT_WINDOW_WIDTH) / glutGet(GLUT_WINDOW_HEIGHT); // proporção 
+//glEnable(GL_BLEND);
+//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//glDepthMask(GL_FALSE);
 
-	//glPushMatrix();
-	//glTranslatef(cam->eye.x, OBJECTO_ALTURA, cam->eye.z);
-	//glColor4f(0, 0, 1, 0.2);
-	//glRotatef(GRAUS(cam->dir_long), 0, 1, 0);
+//glPushMatrix();
+//glTranslatef(cam->eye.x, OBJECTO_ALTURA, cam->eye.z);
+//glColor4f(0, 0, 1, 0.2);
+//glRotatef(GRAUS(cam->dir_long), 0, 1, 0);
 
-	//glBegin(GL_TRIANGLES);
-	//glVertex3f(0, 0, 0);
-	//glVertex3f(5 * cos(RAD(cam->fov*ratio*0.5)), 0, -5 * sin(RAD(cam->fov*ratio*0.5)));
-	//glVertex3f(5 * cos(RAD(cam->fov*ratio*0.5)), 0, 5 * sin(RAD(cam->fov*ratio*0.5)));
-	//glEnd();
-	//glPopMatrix();
+//glBegin(GL_TRIANGLES);
+//glVertex3f(0, 0, 0);
+//glVertex3f(5 * cos(RAD(cam->fov*ratio*0.5)), 0, -5 * sin(RAD(cam->fov*ratio*0.5)));
+//glVertex3f(5 * cos(RAD(cam->fov*ratio*0.5)), 0, 5 * sin(RAD(cam->fov*ratio*0.5)));
+//glEnd();
+//glPopMatrix();
 
-	//glDepthMask(GL_TRUE);
-	//glDisable(GL_BLEND);
+//glDepthMask(GL_TRUE);
+//glDisable(GL_BLEND);
 //}
 
 
@@ -282,6 +382,8 @@ void desenhaBullet(Bullet b)
 
 void desenhaShield()
 {
+	glPushMatrix();
+	glScalef(1, 1, 0.5);
 	// enable blending.
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -292,11 +394,14 @@ void desenhaShield()
 
 	// disable blending
 	glDisable(GL_BLEND);
+	glColor4f(1, 1, 1, 1);
+
+	glPopMatrix();
 }
 
 void desenhaTanque(Tanque t, GLuint janela)
 {
-
+	glPushMatrix();
 	/*GLUquadric *quad;
 	quad = gluNewQuadric();
 	gluQuadricDrawStyle(quad, GLU_FILL);
@@ -336,9 +441,10 @@ void desenhaTanque(Tanque t, GLuint janela)
 
 	if (t.IsShieldActive)
 	{
-		glScalef(1, 1, 0.5);
 		desenhaShield();
+
 	}
+	glPopMatrix();
 }
 
 void desenhaLabirinto()
@@ -346,7 +452,7 @@ void desenhaLabirinto()
 	// código para desenhar o labirinto
 	int i, j;
 
-	glColor3f(0.5f, 0.5f, 0.5f);
+	//glColor3f(1.0f, 1.0f, 1.0f);
 	for (i = 0; i < MAZE_HEIGHT; i++)
 	{
 		for (j = 0; j < MAZE_WIDTH; j++)
@@ -370,7 +476,7 @@ void desenhaChao(GLfloat dimensao, GLuint texID)
 	GLfloat i, j;
 	glBindTexture(GL_TEXTURE_2D, texID);
 
-	glColor3f(0.5f, 0.5f, 0.5f);
+	glColor3f(1.0f, 1.0f, 1.0f);
 	for (i = -dimensao; i <= dimensao; i += STEP)
 		for (j = -dimensao; j <= dimensao; j += STEP)
 		{
@@ -395,7 +501,6 @@ void desenhaChao(GLfloat dimensao, GLuint texID)
 }
 
 
-
 /////////////////////////////////////
 //navigateSubwindow
 
@@ -404,22 +509,28 @@ void motionNavigateSubwindow(int x, int y)
 
 }
 
+
 void mouseNavigateSubwindow(int button, int estado, int x, int y)
 {
 
 }
 
-void setPlayerSubwindowCamera(Camera *cam, Tanque *t)
+
+void setPlayerSubwindowCamera(Tanque *t)
 {
-	cam->eye.x = t->x + cos(RAD(t->direccao + t->angTorre - 90))*-3;
-	cam->eye.y = t->y + sin(RAD(RAD(t->direccao + t->angTorre - 90)))*-3;
-	cam->eye.z = (ALTURA_BASE + ALTURA_TORRE) * 0.3 + 0.2;
+	GLfloat eyex = t->x + cos(RAD(t->direccao + t->angTorre - 90)) * cos(RAD(t->angCanhao)) * DISTANCIA_CAMERA;
+	GLfloat eyey = t->y + sin(RAD(t->direccao + t->angTorre - 90)) * cos(RAD(t->angCanhao)) * DISTANCIA_CAMERA;
+	GLfloat eyez = (ALTURA_BASE + ALTURA_TORRE) + 1.5 /*+ sin(RAD(-t->angCanhao)) * DISTANCIA_CAMERA*/;
 
-	cam->center.x = t->x;
-	cam->center.y = t->y;
-	cam->center.z = (ALTURA_BASE + ALTURA_TORRE) * 0.3;
+	//cam->center.x = t->x;
+	//cam->center.y = t->y;
+	//cam->center.z = (ALTURA_BASE + ALTURA_TORRE/2.0);
 
-	gluLookAt(cam->eye.x, cam->eye.y, cam->eye.z, cam->center.x, cam->center.y, cam->center.z, 0, 0, 1);
+	GLfloat centerx = t->x + (COMPRIMENTO_TORRE / 2.0 + (COMPRIMENTO_CANHAO * cos(RAD(t->angCanhao))))* cos(RAD(t->direccao + t->angTorre + 90));
+	GLfloat centery = t->y + (COMPRIMENTO_TORRE / 2.0 + (COMPRIMENTO_CANHAO * cos(RAD(t->angCanhao))))* sin(RAD(t->direccao + t->angTorre + 90));
+	GLfloat centerz = ALTURA_BASE + (ALTURA_TORRE / 2.0) + COMPRIMENTO_CANHAO * sin(RAD(t->angCanhao)) + 1;
+
+	gluLookAt(eyex, eyey, eyez, centerx, centery, centerz, 0, 0, 1);
 }
 
 void displayPlayer1Subwindow()
@@ -428,7 +539,7 @@ void displayPlayer1Subwindow()
 
 	glLoadIdentity();
 
-	setPlayerSubwindowCamera(&estado.camera[JANELA_P1], &model.tanque);  //mais tarde mudar para tanque do jogador 1
+	setPlayerSubwindowCamera(&model.tanque);  //mais tarde mudar para tanque do jogador 1
 	setLight();
 
 	glCallList(model.labirinto[JANELA_P1]);
@@ -454,13 +565,16 @@ void displayPlayer1Subwindow()
 	glutSwapBuffers();
 }
 
+
+
+
 void displayPlayer2Subwindow()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glLoadIdentity();
 
-	setPlayerSubwindowCamera(&estado.camera[JANELA_P2], &model.tanque);  //mais tarde mudar para tanque do jogador 2
+	setPlayerSubwindowCamera(&model.tanque);  //mais tarde mudar para tanque do jogador 2
 	setLight();
 
 	glCallList(model.labirinto[JANELA_P2]);
@@ -487,7 +601,6 @@ void displayPlayer2Subwindow()
 }
 
 
-
 /////////////////////////////////////
 //mainWindow
 
@@ -510,7 +623,7 @@ void displayMainWindow()
 
 void Timer(int value)
 {
-	GLfloat nx = 0, nz = 0;
+	GLfloat nx = 0, ny = 0, nz = 0;
 	GLboolean andar = GL_FALSE;
 
 	GLuint curr = glutGet(GLUT_ELAPSED_TIME);
@@ -597,7 +710,7 @@ void Timer(int value)
 
 	if (estado.teclas.espaco)
 	{
-		if (shoot(&model.tanque)) PlaySound("fire.wav", NULL, SND_ASYNC | SND_FILENAME);
+		shoot(&model.tanque);
 	}
 
 	if (model.tanque.IsReloading)
@@ -618,7 +731,22 @@ void Timer(int value)
 		(&model.tanque)->IsSpeedBoosted = model.tanque.speedBoostCounter <= 0;
 	}
 
+	nx = model.tanque.x;
+	ny = model.tanque.y;
 	updateTank(&model.tanque);
+
+
+	//Colisao Bullet
+	for (int i = 0; i < NUM_BULLETS; i++) {
+		detectaColisaoBala((&model.tanque)->bullets[i], (&model.tanque)->bullets[i].x, (&model.tanque)->bullets[i].y, (model.tanque));
+	}
+
+	//Colisao Tanque
+	if (detectaColisaoTanque(model.tanque.x, model.tanque.y, model.tanque)) {
+
+		model.tanque.x = nx;
+		model.tanque.y = ny;
+	}
 
 
 	redisplayAll();
@@ -658,23 +786,18 @@ void Key(unsigned char key, int x, int y)
 		exit(1);
 		break;
 	case 'W':
-	case 'w': 
-		estado.teclas.w = GL_TRUE;
+	case 'w': estado.teclas.w = GL_TRUE;
 		break;
 	case 'A':
-	case 'a': 
-		estado.teclas.a = GL_TRUE;
+	case 'a': estado.teclas.a = GL_TRUE;
 		break;
 	case 'S':
-	case 's': 
-		estado.teclas.s = GL_TRUE;
+	case 's': estado.teclas.s = GL_TRUE;
 		break;
 	case 'D':
-	case 'd': 
-		estado.teclas.d = GL_TRUE;
+	case 'd': estado.teclas.d = GL_TRUE;
 		break;
-	case ' ': 
-		estado.teclas.espaco = GL_TRUE;
+	case ' ': estado.teclas.espaco = GL_TRUE;
 		break;
 	case 'h':
 	case 'H':
@@ -743,19 +866,19 @@ void SpecialKey(int key, int x, int y)
 	case GLUT_KEY_F2: estado.vista[JANELA_NAVIGATE] = !estado.vista[JANELA_NAVIGATE];
 		break;
 	case GLUT_KEY_PAGE_UP:
-		if (estado.camera[JANELA_P1].fov > 20 || estado.camera[JANELA_P2].fov > 20)
+		if (estado.camera[JANELA_P1].fov > 60 || estado.camera[JANELA_P2].fov > 60)
 		{
 			estado.camera[JANELA_P1].fov--;
 			estado.camera[JANELA_P2].fov--;
 			glutSetWindow(estado.player1Subwindow);
-			reshapePlayerSubwindow(JANELA_P1, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+			reshapePlayer1Subwindow(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 			glutSetWindow(estado.player2Subwindow);
-			reshapePlayerSubwindow(JANELA_P2, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+			reshapePlayer2Subwindow(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 			redisplayAll();
 		}
 		break;
 	case GLUT_KEY_PAGE_DOWN:
-		if (estado.camera[JANELA_P1].fov < 130 || estado.camera[JANELA_P2].fov < 130)
+		if (estado.camera[JANELA_P1].fov < 120 || estado.camera[JANELA_P2].fov < 120)
 		{
 			estado.camera[JANELA_P1].fov++;
 			estado.camera[JANELA_P2].fov++;
@@ -909,30 +1032,6 @@ void createTextures(GLuint texID[])
 
 
 
-void initThemeSound() {
-
-	//open music
-	mciSendString("open ./impact.wav alias wav", NULL, 0, NULL);
-	mciSendString("play wav", NULL, 0, NULL);
-
-	char *MidiLength, *MidiPos;
-
-	MidiLength = (char*)malloc(7);
-	MidiPos = (char*)malloc(7);
-
-	//get music info
-	mciSendString("status wav length", MidiLength, 255, 0);
-
-	do{
-		mciSendString("status wav position", MidiPos, 255, 0);
-
-		int result = strcmp(MidiPos, MidiLength);
-
-		if (result == 0) mciSendString("play wav", NULL, 0, NULL);
-	}while (1);
-
-}
-
 void init()
 {
 
@@ -998,6 +1097,7 @@ void init()
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
 }
 
+/////////////////////////////////////
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
@@ -1006,13 +1106,6 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	if ((estado.mainWindow = glutCreateWindow("Labirinto")) == GL_FALSE)
 		exit(1);
-
-	//mciSendString("open ./impact.wav alias wav", NULL, 0, NULL);
-	//mciSendString("play wav repeat", NULL, 0, NULL);
-
-	//mciSendString("play ./impact.wav", NULL, 0, NULL);
-
-	initThemeSound();
 
 	imprime_ajuda();
 
@@ -1032,6 +1125,21 @@ int main(int argc, char **argv)
 	// Player 1 Window
 	// criar a sub window player 1
 	estado.player1Subwindow = glutCreateSubWindow(estado.mainWindow, 400 + GAP, GAP, 400, 800);
+	//glutGameModeString("1024x768:32@75"); // 1º teste
+	//if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE))
+	//	glutEnterGameMode();
+	//else
+	//{
+	//	glutGameModeString("800x600:32@60"); // 2º teste
+	//	if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE))
+	//		glutEnterGameMode();
+	//	else // Cria Janela Normal
+	//	{
+	//		glutInitWindowPosition(10, 10);
+	//		glutInitWindowSize(800, 600);
+	//		if ((estado.mainWindow = glutCreateWindow("Labirinto")) == GL_FALSE)
+	//			exit(1);
+	//	}
 	init();
 	setLight();
 	setMaterial();

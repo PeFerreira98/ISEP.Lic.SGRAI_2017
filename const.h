@@ -36,6 +36,8 @@
 #define SCALE_HOMER               0.005
 #define EYE_ROTACAO			        1
 
+#define DISTANCIA_CAMERA		8
+
 
 /**************************************
 ***			Texturas				***
