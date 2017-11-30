@@ -122,6 +122,7 @@ typedef struct {
 	GLuint			texID[NUM_JANELAS][NUM_TEXTURAS];
 	GLuint			labirinto[NUM_JANELAS];
 	GLuint			chao[NUM_JANELAS];
+	GLuint			powerUpRotation = 0;
 	GLuint			xMouse;
 	GLuint			yMouse;
 	//StudioModel   homer[NUM_JANELAS];   // Modelo Homer

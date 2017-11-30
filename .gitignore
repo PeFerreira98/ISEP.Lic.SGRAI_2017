@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# User-Custom
+[Mm]yStorage/
+LIBS/
+theme.wav
+
 # User-specific files
 *.suo
 *.user

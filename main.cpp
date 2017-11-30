@@ -380,6 +380,16 @@ void desenhaBullet(Bullet b)
 	glPopMatrix();
 }
 
+void desenhaPowerUp()
+{
+	glTranslatef(0, 0, 1);
+	glRotatef(model.powerUpRotation, 0, 0, 1);
+	glPushMatrix();
+	glScalef(1, 1, 1);
+	glutSolidOctahedron();
+	glPopMatrix();
+}
+
 void desenhaShield()
 {
 	glPushMatrix();
@@ -576,6 +586,8 @@ void displayPlayer1Subwindow()
 	{
 		glPushMatrix();
 		desenhaTanque(model.tanque, JANELA_P1);    //mais tarde mudar para tanque do jogador 1
+		desenhaPowerUp();
+
 		int i;
 		for (i = 0; i < NUM_BULLETS; i++)
 		{
@@ -611,6 +623,7 @@ void displayPlayer2Subwindow()
 	{
 		glPushMatrix();
 		desenhaTanque(model.tanque, JANELA_P2);    //mais tarde mudar para tanque do jogador 2
+		desenhaPowerUp();
 		int i;
 		for (i = 0; i < NUM_BULLETS; i++)
 		{
@@ -660,6 +673,7 @@ void Timer(int value)
 	glutTimerFunc(estado.delayMovimento, Timer, 0);
 	model.prev = curr;
 
+	if(model.powerUpRotation++ == 360) model.powerUpRotation=0;
 
 	//if (estado.teclas.up) {
 	//	// calcula nova posição nx,nz
