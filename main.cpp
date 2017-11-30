@@ -380,14 +380,26 @@ void desenhaBullet(Bullet b)
 	glPopMatrix();
 }
 
-void desenhaPowerUp()
+void desenhaPowerUpSymbol()
 {
 	glPushMatrix();
 	glTranslatef(0, 0, 1);
 	glRotatef(model.powerUpRotation, 0, 0, 1);
-	glScalef(1, 1, 1);
+	glScalef(0.5, 0.5, 0.5);
 	glutSolidOctahedron();
 	glPopMatrix();
+}
+
+void desenhaPowerUp() {
+	desenhaPowerUpSymbol();
+}
+
+void desenhaSpeedUp() {
+	desenhaPowerUpSymbol();
+}
+
+void desenhaShieldUp() {
+	desenhaPowerUpSymbol();
 }
 
 void desenhaShield()
@@ -474,10 +486,13 @@ void desenhaLabirintoElemento(char element)
 	case LAB_PAREDE:
 		break;
 	case LAB_SHILED:
+		desenhaShieldUp();
 		break;
 	case LAB_SPEED:
+		desenhaSpeedUp();
 		break;
 	case LAB_POWER:
+		desenhaPowerUp();
 		break;
 	default:
 		break;
@@ -586,7 +601,7 @@ void displayPlayer1Subwindow()
 	{
 		glPushMatrix();
 		desenhaTanque(model.tanque, JANELA_P1);    //mais tarde mudar para tanque do jogador 1
-		desenhaPowerUp();
+		desenhaPowerUpSymbol();
 
 		int i;
 		for (i = 0; i < NUM_BULLETS; i++)
@@ -623,7 +638,8 @@ void displayPlayer2Subwindow()
 	{
 		glPushMatrix();
 		desenhaTanque(model.tanque, JANELA_P2);    //mais tarde mudar para tanque do jogador 2
-		desenhaPowerUp();
+		desenhaPowerUpSymbol();
+
 		int i;
 		for (i = 0; i < NUM_BULLETS; i++)
 		{
