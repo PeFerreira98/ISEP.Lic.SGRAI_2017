@@ -382,9 +382,9 @@ void desenhaBullet(Bullet b)
 
 void desenhaPowerUp()
 {
+	glPushMatrix();
 	glTranslatef(0, 0, 1);
 	glRotatef(model.powerUpRotation, 0, 0, 1);
-	glPushMatrix();
 	glScalef(1, 1, 1);
 	glutSolidOctahedron();
 	glPopMatrix();
