@@ -710,7 +710,7 @@ void Timer(int value)
 
 	if (estado.teclas.espaco)
 	{
-		shoot(&model.tanque);
+		if (shoot(&model.tanque)) PlaySound("fire.wav", NULL, SND_ASYNC | SND_FILENAME);
 	}
 
 	if (model.tanque.IsReloading)
@@ -1106,6 +1106,8 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	if ((estado.mainWindow = glutCreateWindow("Labirinto")) == GL_FALSE)
 		exit(1);
+
+	mciSendString("play ./impact.wav", NULL, 0, NULL);
 
 	imprime_ajuda();
 

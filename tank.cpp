@@ -14,11 +14,11 @@ void stats(Tanque *t)
 	}
 }
 
-void shoot(Tanque *t)
+bool shoot(Tanque *t)
 {
 	if (t->IsReloading)
 	{
-		return;
+		return false;
 	}
 
 	// find available space
@@ -42,6 +42,8 @@ void shoot(Tanque *t)
 	// set reload
 	t->IsReloading = true;
 	t->reloadCounter = RELOAD_TIME;
+
+	return true;
 }
 
 

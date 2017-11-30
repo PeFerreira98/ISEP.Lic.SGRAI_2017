@@ -5,7 +5,7 @@
 #include "structs.h"
 #include "const.h"
 
-void shoot(Tanque *t);
+bool shoot(Tanque *t);
 void stats(Tanque *t);
 
 void canonDown(Tanque *t);
