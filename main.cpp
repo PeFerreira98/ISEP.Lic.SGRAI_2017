@@ -447,6 +447,33 @@ void desenhaTanque(Tanque t, GLuint janela)
 	glPopMatrix();
 }
 
+void desenhaLimite()
+{
+	desenhaCubo();
+	glTranslatef(0, 0, 1);
+	desenhaCubo();
+}
+
+void desenhaLabirintoElemento(char element)
+{
+	switch (element)
+	{
+	case LAB_LIMITE:
+		desenhaLimite();
+		break;
+	case LAB_PAREDE:
+		break;
+	case LAB_SHILED:
+		break;
+	case LAB_SPEED:
+		break;
+	case LAB_POWER:
+		break;
+	default:
+		break;
+	}
+}
+
 void desenhaLabirinto()
 {
 	// código para desenhar o labirinto
@@ -457,11 +484,11 @@ void desenhaLabirinto()
 	{
 		for (j = 0; j < MAZE_WIDTH; j++)
 		{
-			if (model.mapa.mapa[i][j] == '*')
+			if (model.mapa.mapa[i][j] != LAB_VAZIO)
 			{
 				glPushMatrix();
 				glTranslatef(j - (MAZE_WIDTH / 2), i - (MAZE_HEIGHT / 2), 0.5);
-				desenhaCubo();
+				desenhaLabirintoElemento(model.mapa.mapa[i][j]);
 				glPopMatrix();
 			}
 		}

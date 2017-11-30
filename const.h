@@ -68,6 +68,23 @@
 
 
 /**************************************
+***			Labirinto				***
+**************************************/
+
+#define LAB_VAZIO			' '
+#define LAB_PAREDE			'w'
+#define LAB_LIMITE			'W'
+#define LAB_HOUSE
+
+#define	LAB_SHILED			'S'
+#define	LAB_SHILED_OFF		's'
+#define	LAB_POWER			'P'
+#define	LAB_POWER_OFF		'p'
+#define	LAB_SPEED			'V'
+#define	LAB_SPEED_OFF		'v'
+
+
+/**************************************
 ***		Dimensoes Tanque			***
 **************************************/
 
