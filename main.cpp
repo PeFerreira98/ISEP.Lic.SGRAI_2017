@@ -9,28 +9,6 @@ Estado estado;
 Modelo model;
 
 
-//char mazedata[MAZE_HEIGHT][MAZE_WIDTH + 1] = {
-//  "                  ",
-//  " ******* ******** ",
-//  " *       *      * ",
-//  " * * *** * *    * ",
-//  " * **  * ** * * * ",
-//  " *     *      * * ",
-//  " *          *** * ",
-//  " *           *  * ",
-//  " *     * *** **** ",
-//  " * *   *   *    * ",
-//  " *   ****  *    * ",
-//  " ********  **** * ",
-//  " *            * * ",
-//  " *     *      * * ",
-//  " ** ** *    *** * ",
-//  " *   *      *   * ",
-//  " *******  **** ** ",
-//  "                  "
-//};
-
-
 ////////////////////////////////////
 //// Iluminação e materiais
 
@@ -284,7 +262,7 @@ void desenhaCubo(GLuint texID, GLfloat texS, GLfloat texT)
 
 void desenhaCubo() // default
 {
-	desenhaCubo(model.texID[0][ID_TEXTURA_CUBOS], 0, 0.25);
+	desenhaCubo(model.texID[ID_TEXTURA_CUBOS], 0, 0.25);
 }
 
 //void desenhaBussola(int width, int height)  // largura e altura da janela
@@ -380,28 +358,6 @@ void desenhaBullet(Bullet b)
 	glPopMatrix();
 }
 
-void desenhaPowerUpSymbol()
-{
-	glPushMatrix();
-	glTranslatef(0, 0, 1);
-	glRotatef(model.powerUpRotation, 0, 0, 1);
-	glScalef(0.5, 0.5, 0.5);
-	glutSolidOctahedron();
-	glPopMatrix();
-}
-
-void desenhaPowerUp() {
-	desenhaPowerUpSymbol();
-}
-
-void desenhaSpeedUp() {
-	desenhaPowerUpSymbol();
-}
-
-void desenhaShieldUp() {
-	desenhaPowerUpSymbol();
-}
-
 void desenhaShield()
 {
 	glPushMatrix();
@@ -437,7 +393,8 @@ void desenhaTanque(Tanque t, GLuint janela)
 	glRotatef(t.direccao, 0, 0, 1); //tanque
 	glPushMatrix();
 	glScalef(LARGURA_BASE, COMPRIMENTO_BASE, ALTURA_BASE);
-	desenhaCubo(model.texID[janela][ID_TEXTURA_TANQUE], 0, 1);
+	//desenhaCubo(model.texID[janela][t.skin], 0, 1);
+	desenhaCubo(model.texID[t.skin], 0, 1);
 	glPopMatrix();
 
 	glPushMatrix();
@@ -447,7 +404,7 @@ void desenhaTanque(Tanque t, GLuint janela)
 	glTranslatef(0, 0, ALTURA_BASE / 2.0 + ALTURA_TORRE / 2.0);
 	glPushMatrix();
 	glScalef(LARGURA_TORRE, COMPRIMENTO_TORRE, ALTURA_TORRE);
-	desenhaCubo(model.texID[janela][ID_TEXTURA_TANQUE], 0, 1);
+	desenhaCubo(model.texID[t.skin], 0, 1);
 	glPopMatrix();
 
 	// canhao
@@ -456,7 +413,7 @@ void desenhaTanque(Tanque t, GLuint janela)
 	glTranslatef(0, COMPRIMENTO_CANHAO / 2.0, 0);	//mover o canhao
 	glPushMatrix();
 	glScalef(RAIO_CANHAO, COMPRIMENTO_CANHAO, RAIO_CANHAO);
-	desenhaCubo(model.texID[janela][ID_TEXTURA_TANQUE], 0, 1);
+	desenhaCubo(model.texID[t.skin], 0, 1);
 	glPopMatrix();
 
 	glPopMatrix();
@@ -469,14 +426,66 @@ void desenhaTanque(Tanque t, GLuint janela)
 	glPopMatrix();
 }
 
-void desenhaLimite()
+
+// Mapa
+
+void desenhaPowerUpSymbol()
 {
-	desenhaCubo();
+	glPushMatrix();
 	glTranslatef(0, 0, 1);
-	desenhaCubo();
+	glRotatef(model.powerUpRotation, 0, 0, 1);
+	glScalef(0.5, 0.5, 0.5);
+	glutSolidOctahedron();
+	glPopMatrix();
 }
 
-void desenhaLabirintoElemento(char element)
+void desenhaPowerUp() {
+	desenhaPowerUpSymbol();
+}
+
+void desenhaSpeedUp() {
+	desenhaPowerUpSymbol();
+}
+
+void desenhaShieldUp() {
+	desenhaPowerUpSymbol();
+}
+
+void desenhaCasa(GLfloat x, GLfloat y)
+{
+	glPushMatrix();
+	glTranslatef(x / 2.0, y / 2.0, 0);
+	glScalef(x, y, 1);
+
+	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_CASA]);
+	desenhaCubo(model.texID[ID_TEXTURA_CASA], 0, 1);
+	glTranslatef(0, 0, 0.5);
+
+	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_TELHADO]);
+	glRotatef(45, 0, 0, 1);
+	GLfloat scale = sqrtf(2) / 2.0;
+	glScalef(scale, scale, scale);
+	glutSolidOctahedron();
+
+	glPopMatrix();
+}
+
+void desenhaParede()
+{
+	desenhaCubo(model.texID[ID_TEXTURA_PAREDE], 0, 1);
+}
+
+void desenhaLimite()
+{
+	glPushMatrix();
+	desenhaParede();
+	glTranslatef(0, 0, 1);
+	desenhaParede();
+	glPopMatrix();
+}
+
+
+void desenhaLabirintoElemento(char element, int x, int y)
 {
 	switch (element)
 	{
@@ -494,7 +503,31 @@ void desenhaLabirintoElemento(char element)
 	case LAB_POWER:
 		desenhaPowerUp();
 		break;
-	default:
+	case LAB_HOUSE:
+		int sizeX = 1, sizeY = 1;
+		int cx = 0, cy = 1;
+		while (true)
+		{
+			if (model.mapa.mapa[x + cx][y + cy] == LAB_HOUSE2)
+			{
+				cy++;
+				sizeY = cy > sizeY ? cy : sizeY;
+			}
+			else
+			{
+				if (model.mapa.mapa[x + cx + 1][y] == LAB_HOUSE2)
+				{
+					cx++;
+					cy = 0;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+		sizeX += cx;
+		desenhaCasa(sizeX, sizeY);
 		break;
 	}
 }
@@ -513,14 +546,13 @@ void desenhaLabirinto()
 			{
 				glPushMatrix();
 				glTranslatef(j - (MAZE_WIDTH / 2), i - (MAZE_HEIGHT / 2), 0.5);
-				desenhaLabirintoElemento(model.mapa.mapa[i][j]);
+				desenhaLabirintoElemento(model.mapa.mapa[i][j], i, j);
 				glPopMatrix();
 			}
 		}
 	}
 }
 
-#define STEP    1
 
 void desenhaChao(GLfloat dimensao, GLuint texID)
 {
@@ -556,27 +588,23 @@ void desenhaChao(GLfloat dimensao, GLuint texID)
 /////////////////////////////////////
 //navigateSubwindow
 
-void motionNavigateSubwindow(int x, int y)
-{
-
-}
-
-
-void mouseNavigateSubwindow(int button, int estado, int x, int y)
-{
-
-}
+//void motionNavigateSubwindow(int x, int y)
+//{
+//
+//}
+//
+//
+//void mouseNavigateSubwindow(int button, int estado, int x, int y)
+//{
+//
+//}
 
 
 void setPlayerSubwindowCamera(Tanque *t)
 {
 	GLfloat eyex = t->x + cos(RAD(t->direccao + t->angTorre - 90)) * cos(RAD(t->angCanhao)) * DISTANCIA_CAMERA;
 	GLfloat eyey = t->y + sin(RAD(t->direccao + t->angTorre - 90)) * cos(RAD(t->angCanhao)) * DISTANCIA_CAMERA;
-	GLfloat eyez = (ALTURA_BASE + ALTURA_TORRE) + 1.5 /*+ sin(RAD(-t->angCanhao)) * DISTANCIA_CAMERA*/;
-
-	//cam->center.x = t->x;
-	//cam->center.y = t->y;
-	//cam->center.z = (ALTURA_BASE + ALTURA_TORRE/2.0);
+	GLfloat eyez = (ALTURA_BASE + ALTURA_TORRE) + 1 /*+ sin(RAD(-t->angCanhao)) * DISTANCIA_CAMERA*/;
 
 	GLfloat centerx = t->x + (COMPRIMENTO_TORRE / 2.0 + (COMPRIMENTO_CANHAO * cos(RAD(t->angCanhao))))* cos(RAD(t->direccao + t->angTorre + 90));
 	GLfloat centery = t->y + (COMPRIMENTO_TORRE / 2.0 + (COMPRIMENTO_CANHAO * cos(RAD(t->angCanhao))))* sin(RAD(t->direccao + t->angTorre + 90));
@@ -601,7 +629,6 @@ void displayPlayer1Subwindow()
 	{
 		glPushMatrix();
 		desenhaTanque(model.tanque, JANELA_P1);    //mais tarde mudar para tanque do jogador 1
-		desenhaPowerUpSymbol();
 
 		int i;
 		for (i = 0; i < NUM_BULLETS; i++)
@@ -638,7 +665,6 @@ void displayPlayer2Subwindow()
 	{
 		glPushMatrix();
 		desenhaTanque(model.tanque, JANELA_P2);    //mais tarde mudar para tanque do jogador 2
-		desenhaPowerUpSymbol();
 
 		int i;
 		for (i = 0; i < NUM_BULLETS; i++)
@@ -668,7 +694,6 @@ void redisplayAll(void)
 	glutPostRedisplay();
 	glutSetWindow(estado.player2Subwindow);
 	glutPostRedisplay();
-	glutPostRedisplay();
 }
 
 void displayMainWindow()
@@ -683,40 +708,12 @@ void Timer(int value)
 	GLboolean andar = GL_FALSE;
 
 	GLuint curr = glutGet(GLUT_ELAPSED_TIME);
-	// calcula velocidade baseado no tempo passado
-	//float velocidade = model.objecto.vel*(curr - model.prev)*0.001;
 
 	glutTimerFunc(estado.delayMovimento, Timer, 0);
 	model.prev = curr;
 
-	if(model.powerUpRotation++ == 360) model.powerUpRotation=0;
+	if (model.powerUpRotation++ == 360) model.powerUpRotation = 0;
 
-	//if (estado.teclas.up) {
-	//	// calcula nova posição nx,nz
-	//	if (!detectaColisao(nx, nz)) {
-	//		//model.objecto.pos.x = nx;
-	//		//model.objecto.pos.z = nz;
-	//	}
-	//	andar = GL_TRUE;
-	//}
-	//if (estado.teclas.down) {
-	//	// calcula nova posição nx,nz
-	//	if (!detectaColisao(nx, nz)) {
-	//		//model.objecto.pos.x = nx;
-	//		//model.objecto.pos.z = nz;
-	//	}
-	//	andar = GL_TRUE;
-	//}
-	//if (estado.teclas.left) {
-	//	// rodar camara e objecto
-	//	//model.objecto.dir += RAD(2);
-	//	//estado.camera.dir_long += RAD(2);
-	//}
-	//if (estado.teclas.right) {
-	//	// rodar camara e objecto
-	//	//model.objecto.dir -= RAD(2);
-	//	//estado.camera.dir_long -= RAD(2);
-	//}
 
 	//if (estado.menuActivo || model.parado) // sair em caso de o jogo estar parado ou menu estar activo
 	//	return;
@@ -767,7 +764,7 @@ void Timer(int value)
 
 	if (estado.teclas.espaco)
 	{
-		if (shoot(&model.tanque)) PlaySound("fire.wav", NULL, SND_ASYNC | SND_FILENAME);
+		if (shoot(&model.tanque)) PlaySound("sounds\\fire.wav", NULL, SND_ASYNC | SND_FILENAME);
 	}
 
 	if (model.tanque.IsReloading)
@@ -918,9 +915,9 @@ void SpecialKey(int key, int x, int y)
 		break;
 	case GLUT_KEY_RIGHT: estado.teclas.right = GL_TRUE;
 		break;
-	case GLUT_KEY_F1: estado.vista[JANELA_TOP] = !estado.vista[JANELA_TOP];
+	case GLUT_KEY_F1: estado.vista[JANELA_P1] = !estado.vista[JANELA_P1];
 		break;
-	case GLUT_KEY_F2: estado.vista[JANELA_NAVIGATE] = !estado.vista[JANELA_NAVIGATE];
+	case GLUT_KEY_F2: estado.vista[JANELA_P2] = !estado.vista[JANELA_P2];
 		break;
 	case GLUT_KEY_PAGE_UP:
 		if (estado.camera[JANELA_P1].fov > 60 || estado.camera[JANELA_P2].fov > 60)
@@ -946,7 +943,6 @@ void SpecialKey(int key, int x, int y)
 		}
 		break;
 	}
-
 }
 
 // Callback para interaccao via teclas especiais (largar na tecla)
@@ -981,7 +977,7 @@ void createDisplayLists(int janelaID)
 	model.chao[janelaID] = model.labirinto[janelaID] + 1;
 	glNewList(model.chao[janelaID], GL_COMPILE);
 	glPushAttrib(GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT);
-	desenhaChao(CHAO_DIMENSAO, model.texID[janelaID][ID_TEXTURA_CHAO]);
+	desenhaChao(CHAO_DIMENSAO, model.texID[ID_TEXTURA_CHAO]);
 	glPopAttrib();
 	glEndList();
 }
@@ -989,7 +985,6 @@ void createDisplayLists(int janelaID)
 
 ///////////////////////////////////
 /// Texturas
-
 
 // S— para windows (usa biblioteca glaux)
 #ifdef _WIN32
@@ -1070,16 +1065,68 @@ void createTextures(GLuint texID[])
 		exit(0);
 	}
 
-	if (read_JPEG_file(NOME_TEXTURA_TANQUE, &image, &w, &h, &bpp))
+	if (read_JPEG_file(NOME_TEXTURA_CASA, &image, &w, &h, &bpp))
 	{
-		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE]);
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_CASA]);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
 	}
 	else {
-		printf("Textura %s not Found\n", NOME_TEXTURA_CHAO);
+		printf("Textura %s not Found\n", NOME_TEXTURA_CASA);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TELHADO, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TELHADO]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TELHADO);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_PAREDE, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_PAREDE]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_PAREDE);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE1, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE1]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE1);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE2, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE2]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE2);
 		exit(0);
 	}
 
@@ -1087,56 +1134,34 @@ void createTextures(GLuint texID[])
 }
 
 
-
-
-void init()
+/////////////////////////////////////
+void initModel()
 {
-
-	srand((unsigned)time(NULL));
-
 	model.parado = GL_FALSE;
+	model.andar = GL_FALSE;
+	model.xMouse = model.yMouse = -1;
+	model.tanque.skin = ID_TEXTURA_TANQUE2;
 
 	estado.debug = DEBUG;
 	estado.menuActivo = GL_FALSE;
 	estado.delayMovimento = DELAY_MOVIMENTO;
-	//estado.camera.eye.x = 40;
-	//estado.camera.eye.y = 40;
-	//estado.camera.eye.z = 40;
-	//estado.camera.center.x = 0;
-	//estado.camera.center.y = 0;
-	//estado.camera.center.z = 0;
-	//estado.camera.up.x = 0;
-	//estado.camera.up.y = 0;
-	//estado.camera.up.z = 1;
-	//estado.ortho = GL_TRUE;
-	//estado.camera.fov = 60;
 
 	estado.teclas.a = estado.teclas.w = estado.teclas.s = estado.teclas.d = \
 		estado.teclas.up = estado.teclas.down = estado.teclas.left = estado.teclas.right = GL_FALSE;
 
-	GLfloat amb[] = { 0.3f, 0.3f, 0.3f, 1.0f };
-
-	estado.camera[0].eye.x = 0;
-	estado.camera[0].eye.y = OBJECTO_ALTURA * 2;
-	estado.camera[0].eye.z = 0;
-	estado.camera[0].dir_long = 0;
-	estado.camera[0].dir_lat = 0;
-	estado.camera[0].fov = 60;
-
-	estado.camera[1].eye.x = 0;
-	estado.camera[1].eye.y = OBJECTO_ALTURA * 2;
-	estado.camera[1].eye.z = 0;
-	estado.camera[1].dir_long = 0;
-	estado.camera[1].dir_lat = 0;
-	estado.camera[1].fov = 60;
+	estado.camera[0].fov = 100;
+	estado.camera[1].fov = 100;
 
 	estado.localViewer = 1;
-	estado.vista[JANELA_TOP] = 0;
-	estado.vista[JANELA_NAVIGATE] = 0;
+	estado.vista[JANELA_P1] = 0;
+	estado.vista[JANELA_P2] = 0;
+}
 
+void init()
+{
+	srand((unsigned)time(NULL));
 
-	model.xMouse = model.yMouse = -1;
-	model.andar = GL_FALSE;
+	GLfloat amb[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_SMOOTH);
@@ -1158,13 +1183,14 @@ void init()
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
+
+	initModel();
+
 	glutInitWindowPosition(10, 10);
 	glutInitWindowSize(800 + GAP * 3, 400 + GAP * 2);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	if ((estado.mainWindow = glutCreateWindow("Labirinto")) == GL_FALSE)
 		exit(1);
-
-	mciSendString("play ./impact.wav", NULL, 0, NULL);
 
 	imprime_ajuda();
 
@@ -1180,35 +1206,20 @@ int main(int argc, char **argv)
 	glutSpecialUpFunc(SpecialKeyUp);
 
 
-
 	// Player 1 Window
 	// criar a sub window player 1
 	estado.player1Subwindow = glutCreateSubWindow(estado.mainWindow, 400 + GAP, GAP, 400, 800);
-	//glutGameModeString("1024x768:32@75"); // 1º teste
-	//if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE))
-	//	glutEnterGameMode();
-	//else
-	//{
-	//	glutGameModeString("800x600:32@60"); // 2º teste
-	//	if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE))
-	//		glutEnterGameMode();
-	//	else // Cria Janela Normal
-	//	{
-	//		glutInitWindowPosition(10, 10);
-	//		glutInitWindowSize(800, 600);
-	//		if ((estado.mainWindow = glutCreateWindow("Labirinto")) == GL_FALSE)
-	//			exit(1);
-	//	}
+
 	init();
 	setLight();
 	setMaterial();
 
-	createTextures(model.texID[JANELA_P1]);
+	//createTextures(model.texID[JANELA_P1]);
+	createTextures(model.texID);
 	createDisplayLists(JANELA_P1);
 
 	glutReshapeFunc(reshapePlayer1Subwindow);
 	glutDisplayFunc(displayPlayer1Subwindow);
-	//glutMouseFunc(mouseNavigateSubwindow);
 
 	glutTimerFunc(estado.delayMovimento, Timer, 0);
 	glutKeyboardFunc(Key);
@@ -1220,16 +1231,17 @@ int main(int argc, char **argv)
 	// Player 2 Window
 	// criar a sub window player 2
 	estado.player2Subwindow = glutCreateSubWindow(estado.mainWindow, 400 + GAP, GAP, 400, 800);
+
 	init();
 	setLight();
 	setMaterial();
 
-	createTextures(model.texID[JANELA_P2]);
+	//createTextures(model.texID[JANELA_P2]);
+	createTextures(model.texID);
 	createDisplayLists(JANELA_P2);
 
-	glutReshapeFunc(reshapePlayer1Subwindow);
-	glutDisplayFunc(displayPlayer1Subwindow);
-	//glutMouseFunc(mouseNavigateSubwindow);
+	glutReshapeFunc(reshapePlayer2Subwindow);
+	glutDisplayFunc(displayPlayer2Subwindow);
 
 	glutTimerFunc(estado.delayMovimento, Timer, 0);
 	glutKeyboardFunc(Key);
@@ -1240,5 +1252,4 @@ int main(int argc, char **argv)
 
 	glutMainLoop();
 	return 0;
-
 }

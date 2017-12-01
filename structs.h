@@ -70,6 +70,8 @@ typedef struct {
 
 	Bullet		bullets[NUM_BULLETS];
 	Marcador	marcador;
+
+	GLuint		skin;
 }Tanque;
 
 typedef struct {
@@ -97,35 +99,35 @@ typedef struct {
 	int width;
 	int height;
 	char mapa[MAZE_HEIGHT][MAZE_WIDTH + 1] = {
-		"                  ",
-		" ******* ******** ",
-		" *       *      * ",
-		" * * *** * *    * ",
-		" * **  * ** * * * ",
-		" *     *      * * ",
-		" *          *** * ",
-		" *           *  * ",
-		" *     * *** **** ",
-		" * *   *   *    * ",
-		" *   ****  *    * ",
-		" ********  **** * ",
-		" *            * * ",
-		" *     *      * * ",
-		" ** ** *    *** * ",
-		" *   *      *   * ",
-		" *******  **** ** ",
-		"                  "
+		"                   ",
+		" WWWWWWWWWWWWWWWWW ",
+		" W T             W ",
+		" W       P       W ",
+		" W               W ",
+		" W    wwwwwww    W ",
+		" W               W ",
+		" W               W ",
+		" W     Hh        W ",
+		" W     hh        W ",
+		" W               W ",
+		" W          w    W ",
+		" W    H     w    W ",
+		" W          w    W ",
+		" W          w    W ",
+		" W            t  W ",
+		" WWWWWWWWWWWWWWWWW ",
+		"                   "
 	};
 }Mapa;
 
 typedef struct {
-	GLuint			texID[NUM_JANELAS][NUM_TEXTURAS];
+	//GLuint			texID[NUM_JANELAS][NUM_TEXTURAS];
+	GLuint			texID[NUM_TEXTURAS];
+
 	GLuint			labirinto[NUM_JANELAS];
 	GLuint			chao[NUM_JANELAS];
-	GLuint			powerUpRotation = 0;
 	GLuint			xMouse;
 	GLuint			yMouse;
-	//StudioModel   homer[NUM_JANELAS];   // Modelo Homer
 	GLboolean		andar;
 	GLuint			prev;
 	Tanque			tanque;
