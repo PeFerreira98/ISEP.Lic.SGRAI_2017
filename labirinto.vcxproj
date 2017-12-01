@@ -73,8 +73,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\pefer\source\repos\SGRAI_1718\LIBS\FMOD\inc;C:\Users\pefer\source\repos\SGRAI_1718\LIBS\GLUT;C:\Users\pefer\source\repos\SGRAI_1718\LIBS\GLAux;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\pefer\source\repos\SGRAI_1718\LIBS\FMOD\lib;C:\Users\pefer\source\repos\SGRAI_1718\LIBS\GLAux;C:\Users\pefer\source\repos\SGRAI_1718\LIBS\GLUT;$(LibraryPath)</LibraryPath>
+    <IncludePath>GLUT;GLAUX;C:\GLUT;C:\GLAUX;C:\Users\pefer\source\repos\SGRAI_1718\LIBS\FMOD\inc;C:\Users\pefer\source\repos\SGRAI_1718\LIBS\GLUT;C:\Users\pefer\source\repos\SGRAI_1718\LIBS\GLAux;$(IncludePath)</IncludePath>
+    <LibraryPath>GLUT;GLAUX;C:\GLUT;C:\GLAUX;C:\Users\pefer\source\repos\SGRAI_1718\LIBS\FMOD\lib;C:\Users\pefer\source\repos\SGRAI_1718\LIBS\GLAux;C:\Users\pefer\source\repos\SGRAI_1718\LIBS\GLUT;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
