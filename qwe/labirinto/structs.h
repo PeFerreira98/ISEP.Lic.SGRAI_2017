@@ -4,7 +4,8 @@
 #include "const.h"
 
 typedef struct {
-	GLboolean   w, a, s, d, up, down, left, right, espaco;
+	GLboolean   w, a, s, d, t, f, g, h, espaco;
+	GLboolean   i, j, k, l, up, down, left, right, score;
 }Teclas;
 
 typedef struct {

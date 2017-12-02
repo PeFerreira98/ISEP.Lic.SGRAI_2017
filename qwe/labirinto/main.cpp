@@ -689,9 +689,6 @@ void displayPlayer1Subwindow()
 	glutSwapBuffers();
 }
 
-
-
-
 void displayPlayer2Subwindow()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -760,38 +757,24 @@ void displayMainWindow()
 	glutSwapBuffers();
 }
 
-void Timer(int value)
-{
-	GLfloat nx = 0, ny = 0, nz = 0;
-	GLboolean andar = GL_FALSE;
-
-	GLuint curr = glutGet(GLUT_ELAPSED_TIME);
-
-	glutTimerFunc(estado.delayMovimento, Timer, 0);
-	model.prev = curr;
-
-	if (model.powerUpRotation++ == 360) model.powerUpRotation = 0;
-
-
-	//if (estado.menuActivo || model.parado) // sair em caso de o jogo estar parado ou menu estar activo
-	//	return;
+void TimerMovTanque1() {
 
 	// canhao
-	if (estado.teclas.down)
+	if (estado.teclas.g)
 	{
 		canonDown(&model.tanque1);
 	}
-	if (estado.teclas.up)
+	if (estado.teclas.t)
 	{
 		canonUp(&model.tanque1);
 	}
 
 	// torre
-	if (estado.teclas.left)
+	if (estado.teclas.f)
 	{
 		towerLeft(&model.tanque1);
 	}
-	if (estado.teclas.right)
+	if (estado.teclas.h)
 	{
 		towerRight(&model.tanque1);
 	}
@@ -819,10 +802,83 @@ void Timer(int value)
 	{
 		tankBack(&model.tanque1);
 	}
+}
+
+void TimerMovTanque2() {
+
+	// canhao
+	if (estado.teclas.down)
+	{
+		canonDown(&model.tanque2);
+	}
+	if (estado.teclas.up)
+	{
+		canonUp(&model.tanque2);
+	}
+
+	// torre
+	if (estado.teclas.left)
+	{
+		towerLeft(&model.tanque2);
+	}
+	if (estado.teclas.right)
+	{
+		towerRight(&model.tanque2);
+	}
+
+	// tanque
+	if (estado.teclas.j)
+	{
+		tankLeft(&model.tanque2);
+	}
+	if (estado.teclas.l)
+	{
+		tankRight(&model.tanque2);
+	}
+
+	if (estado.teclas.i)	// i ativo
+	{
+		tankFront(&model.tanque2);
+	}
+	else if (!estado.teclas.k)	// i + k inativo
+	{
+		tankSlowDown(&model.tanque2);
+	}
+
+	if (estado.teclas.k)	// k ativo
+	{
+		tankBack(&model.tanque2);
+	}
+}
+
+void Timer(int value)
+{
+	GLfloat nx1 = 0, ny1 = 0, nz1 = 0;
+	GLfloat nx2 = 0, ny2 = 0, nz2 = 0;
+	GLboolean andar = GL_FALSE;
+
+	GLuint curr = glutGet(GLUT_ELAPSED_TIME);
+
+	glutTimerFunc(estado.delayMovimento, Timer, 0);
+	model.prev = curr;
+
+	if (model.powerUpRotation++ == 360) model.powerUpRotation = 0;
+
+
+	//if (estado.menuActivo || model.parado) // sair em caso de o jogo estar parado ou menu estar activo
+	//	return;
+
+	TimerMovTanque1();
+	TimerMovTanque2();
 
 	if (estado.teclas.espaco)
 	{
 		if (shoot(&model.tanque1)) PlaySound("sounds\\fire.wav", NULL, SND_ASYNC | SND_FILENAME);
+	}
+
+	if (estado.teclas.score)
+	{
+		if (shoot(&model.tanque2)) PlaySound("sounds\\fire.wav", NULL, SND_ASYNC | SND_FILENAME);
 	}
 
 	if (model.tanque1.IsReloading)
@@ -831,10 +887,22 @@ void Timer(int value)
 		(&model.tanque1)->IsReloading = model.tanque1.reloadCounter > 0;
 	}
 
+	if (model.tanque2.IsReloading)
+	{
+		(&model.tanque2)->reloadCounter--;
+		(&model.tanque2)->IsReloading = model.tanque2.reloadCounter > 0;
+	}
+
 	if (model.tanque1.IsPowerBoosted)
 	{
 		(&model.tanque1)->powerBoostCounter--;
 		(&model.tanque1)->IsPowerBoosted = model.tanque1.powerBoostCounter <= 0;
+	}
+
+	if (model.tanque2.IsPowerBoosted)
+	{
+		(&model.tanque2)->powerBoostCounter--;
+		(&model.tanque2)->IsPowerBoosted = model.tanque2.powerBoostCounter <= 0;
 	}
 
 	if (model.tanque1.IsSpeedBoosted)
@@ -843,21 +911,36 @@ void Timer(int value)
 		(&model.tanque1)->IsSpeedBoosted = model.tanque1.speedBoostCounter <= 0;
 	}
 
-	nx = model.tanque1.x;
-	ny = model.tanque1.y;
+	if (model.tanque2.IsSpeedBoosted)
+	{
+		(&model.tanque2)->speedBoostCounter--;
+		(&model.tanque2)->IsSpeedBoosted = model.tanque2.speedBoostCounter <= 0;
+	}
+
+	nx1 = model.tanque1.x;
+	ny1 = model.tanque1.y;
 	updateTank(&model.tanque1);
+
+	nx2 = model.tanque2.x;
+	ny2 = model.tanque2.y;
+	updateTank(&model.tanque2);
 
 
 	//Colisao Bullet
 	for (int i = 0; i < NUM_BULLETS; i++) {
-		detectaColisaoBala((&model.tanque1)->bullets[i], (&model.tanque1)->bullets[i].x, (&model.tanque1)->bullets[i].y, (model.tanque1));
+		if (detectaColisaoBala((&model.tanque1)->bullets[i], (&model.tanque1)->bullets[i].x, (&model.tanque1)->bullets[i].y, (model.tanque1))) {
+			printf("colision detected bullet %d\n", i); //FIXME return always true
+			//PlaySound("sounds\\impact.wav", NULL, SND_ASYNC | SND_FILENAME);
+		}
 	}
 
 	//Colisao Tanque
 	if (detectaColisaoTanque(model.tanque1.x, model.tanque1.y, model.tanque1)) {
+		model.tanque1.x = nx1;
+		model.tanque1.y = ny1;
 
-		model.tanque1.x = nx;
-		model.tanque1.y = ny;
+		printf("wall colision detected \n"); //FIX ME detects colision middle map
+		//PlaySound("sounds\\wallhit.wav", NULL, SND_ASYNC | SND_FILENAME);
 	}
 
 
@@ -897,28 +980,52 @@ void Key(unsigned char key, int x, int y)
 	case 27:
 		exit(1);
 		break;
+
 	case 'W':
 	case 'w': estado.teclas.w = GL_TRUE;
-		break;
-	case 'A':
-	case 'a': estado.teclas.a = GL_TRUE;
 		break;
 	case 'S':
 	case 's': estado.teclas.s = GL_TRUE;
 		break;
+	case 'A':
+	case 'a': estado.teclas.a = GL_TRUE;
+		break;
 	case 'D':
 	case 'd': estado.teclas.d = GL_TRUE;
 		break;
+
+	case 'T':
+	case 't': estado.teclas.t = GL_TRUE;
+		break;
+	case 'G':
+	case 'g': estado.teclas.g = GL_TRUE;
+		break;
+	case 'F':
+	case 'f': estado.teclas.f = GL_TRUE;
+		break;
+	case 'H':
+	case 'h': estado.teclas.h = GL_TRUE;
+		break;
+
 	case ' ': estado.teclas.espaco = GL_TRUE;
 		break;
-	case 'h':
-	case 'H':
-		imprime_ajuda();
+
+	case 'I':
+	case 'i': estado.teclas.i = GL_TRUE;
 		break;
-	case 'l':
+	case 'K':
+	case 'k': estado.teclas.k = GL_TRUE;
+		break;
+	case 'J':
+	case 'j': estado.teclas.j = GL_TRUE;
+		break;
 	case 'L':
-		estado.localViewer = !estado.localViewer;
+	case 'l': estado.teclas.l = GL_TRUE;
 		break;
+
+	case '-': estado.teclas.score = GL_TRUE;
+		break;
+
 	case 'p':
 	case 'P':
 		glutSetWindow(estado.player1Subwindow);
@@ -957,8 +1064,39 @@ void KeyUp(unsigned char key, int x, int y)
 	case 'D':
 	case 'd': estado.teclas.d = GL_FALSE;
 		break;
+
+	case 'T':
+	case 't': estado.teclas.t = GL_FALSE;
+		break;
+	case 'G':
+	case 'g': estado.teclas.g = GL_FALSE;
+		break;
+	case 'F':
+	case 'f': estado.teclas.f = GL_FALSE;
+		break;
+	case 'H':
+	case 'h': estado.teclas.h = GL_FALSE;
+		break;
+
 	case ' ': estado.teclas.espaco = GL_FALSE;
 		break;
+
+	case 'I':
+	case 'i': estado.teclas.i = GL_FALSE;
+		break;
+	case 'K':
+	case 'k': estado.teclas.k = GL_FALSE;
+		break;
+	case 'J':
+	case 'j': estado.teclas.j = GL_FALSE;
+		break;
+	case 'L':
+	case 'l': estado.teclas.l = GL_FALSE;
+		break;
+
+	case '-': estado.teclas.score = GL_FALSE;
+		break;
+
 	}
 }
 
@@ -973,10 +1111,16 @@ void SpecialKey(int key, int x, int y)
 		break;
 	case GLUT_KEY_RIGHT: estado.teclas.right = GL_TRUE;
 		break;
+
 	case GLUT_KEY_F1: estado.vista[JANELA_P1] = !estado.vista[JANELA_P1];
 		break;
 	case GLUT_KEY_F2: estado.vista[JANELA_P2] = !estado.vista[JANELA_P2];
 		break;
+	case GLUT_KEY_F3: imprime_ajuda();
+		break;
+	case GLUT_KEY_F4: estado.localViewer = !estado.localViewer;
+		break;
+
 	case GLUT_KEY_PAGE_UP:
 		if (estado.camera[JANELA_P1].fov > 60 || estado.camera[JANELA_P2].fov > 60)
 		{
