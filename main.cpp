@@ -7,30 +7,71 @@
 
 Estado estado;
 Modelo model;
+GLfloat mat_w[] = { 0.5, 0.5, 0.5, 0.5 };
 
 
 ////////////////////////////////////
 //// Iluminação e materiais
 
+void desenhaLuz(float p[])
+{
+	glDisable(GL_LIGHTING);
+	glPushMatrix();
+	glTranslatef(p[0], p[1], p[2]);
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_w);
+	glutWireCube(0.05);
+
+	glPopMatrix();
+	glEnable(GL_LIGHTING);
+}
+
 
 void setLight()
 {
-	GLfloat light_pos[4] = { -5.0, 20.0, -8.0, 0.0 };
-	GLfloat light_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-	GLfloat light_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };
-	GLfloat light_specular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// ligar iluminação
-	glEnable(GL_LIGHTING);
+	glMatrixMode(GL_MODELVIEW);
 
-	// ligar e definir fonte de luz 0
-	glEnable(GL_LIGHT0);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+	glLightfv(GL_LIGHT0, GL_POSITION, model.light_pos);
+	desenhaLuz(model.light_pos);
 
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado.localViewer);
+
+	//light_pos[0] = 1;
+	//light_pos[1] = 12;
+	//light_pos[2] = 12;
+	//glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+	//desenhaLuz(light_pos);
+
+
+
+	//light_pos[0] = 5;
+	//light_pos[1] = 20;
+	//light_pos[2] = -8;
+	//glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+	//desenhaLuz(light_pos);
+
+	//light_pos[0] = 5;
+	//light_pos[1] = 200;
+	//light_pos[2] = -8;
+	//glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+
+	//desenhaLuz(light_pos);
+
+	//GLfloat light_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+	//GLfloat light_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+	//GLfloat light_specular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+
+	//// ligar iluminação
+	//glEnable(GL_LIGHTING);
+
+	//// ligar e definir fonte de luz 0
+	//glEnable(GL_LIGHT0);
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	//glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	//glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+
+	//glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado.localViewer);
 }
 
 void setMaterial()
@@ -116,7 +157,7 @@ void strokeCenterString(char *str, double x, double y, double z, double s)
 GLboolean detectaColisaoBala(Bullet b, GLfloat nx, GLfloat nz, Tanque t)
 {
 
-	if (model.mapa.mapa[(int)(nx + 9 + 0.6)][(int)(nz + 9 + 0.6)] >= '*') {
+	if (model.mapa.mapa[(int)(nx + 9 + 0.6)][(int)(nz + 9 + 0.6)] >= 'W') {
 		b.IsAlive = false;
 
 		return GL_TRUE;
@@ -157,7 +198,7 @@ GLboolean detectaColisaoBala(Bullet b, GLfloat nx, GLfloat nz, Tanque t)
 
 GLboolean detectaColisaoTanque(GLfloat nx, GLfloat nz, Tanque t)
 {
-	if (model.mapa.mapa[(int)(nx + 9 + 0.6)][(int)(nz + 9 + 0.6)] >= '*') {
+	if (model.mapa.mapa[(int)(nx + 9 + 0.6)][(int)(nz + 9 + 0.6)] >= 'W') {
 
 
 		return GL_TRUE;
@@ -688,6 +729,7 @@ void displayPlayer2Subwindow()
 
 void redisplayAll(void)
 {
+
 	glutSetWindow(estado.mainWindow);
 	glutPostRedisplay();
 	glutSetWindow(estado.player1Subwindow);
@@ -1163,6 +1205,9 @@ void init()
 
 	GLfloat amb[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_POINT_SMOOTH);
@@ -1176,7 +1221,7 @@ void init()
 	else
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
+	//glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
 }
 
 /////////////////////////////////////

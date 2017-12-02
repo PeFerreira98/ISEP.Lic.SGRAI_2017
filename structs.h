@@ -124,6 +124,7 @@ typedef struct {
 	//GLuint			texID[NUM_JANELAS][NUM_TEXTURAS];
 	GLuint			texID[NUM_TEXTURAS];
 
+	GLuint		    powerUpRotation = 0;
 	GLuint			labirinto[NUM_JANELAS];
 	GLuint			chao[NUM_JANELAS];
 	GLuint			xMouse;
@@ -135,4 +136,7 @@ typedef struct {
 	//Tanque      tanque2;
 	GLboolean		parado;
 	Mapa			mapa;
+	GLfloat light_pos[4] = { MAZE_HEIGHT,  MAZE_HEIGHT, 10, 1 };
+
+
 }Modelo;
