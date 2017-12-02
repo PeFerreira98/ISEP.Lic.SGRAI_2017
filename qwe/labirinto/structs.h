@@ -130,9 +130,9 @@ typedef struct {
 	GLuint			yMouse;
 	GLboolean		andar;
 	GLuint			prev;
-	Tanque			tanque;
-	//Tanque      tanque1;
-	//Tanque      tanque2;
+	//Tanque			tanque;
+	Tanque			tanque1;
+	Tanque			tanque2;
 	GLboolean		parado;
 	Mapa			mapa;
 	GLint			powerUpRotation;

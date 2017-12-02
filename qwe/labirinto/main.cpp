@@ -647,7 +647,7 @@ void displayPlayer1Subwindow()
 
 	glLoadIdentity();
 
-	setPlayerSubwindowCamera(&model.tanque);  //mais tarde mudar para tanque do jogador 1
+	setPlayerSubwindowCamera(&model.tanque1); //player1 window2
 	setLight();
 
 	glCallList(model.labirinto[JANELA_P1]);
@@ -656,20 +656,35 @@ void displayPlayer1Subwindow()
 	if (!estado.vista[JANELA_P1])
 	{
 		glPushMatrix();
-		desenhaTanque(model.tanque, JANELA_P1);    //mais tarde mudar para tanque do jogador 1
+		desenhaTanque(model.tanque1, JANELA_P1); //player1 window2
 
 		int i;
 		for (i = 0; i < NUM_BULLETS; i++)
 		{
-			if (model.tanque.bullets[i].IsAlive)
+			if (model.tanque1.bullets[i].IsAlive)
 			{
 				glPushMatrix();
-				desenhaBullet(model.tanque.bullets[i]);
+				desenhaBullet(model.tanque1.bullets[i]);
 				glPopMatrix();
 			}
 		}
 		glPopMatrix();
 	}
+
+	glPushMatrix();
+	desenhaTanque(model.tanque2, JANELA_P1); //player1 window2
+
+	int i;
+	for (i = 0; i < NUM_BULLETS; i++)
+	{
+		if (model.tanque2.bullets[i].IsAlive)
+		{
+			glPushMatrix();
+			desenhaBullet(model.tanque2.bullets[i]);
+			glPopMatrix();
+		}
+	}
+	glPopMatrix();
 
 	glutSwapBuffers();
 }
@@ -683,7 +698,7 @@ void displayPlayer2Subwindow()
 
 	glLoadIdentity();
 
-	setPlayerSubwindowCamera(&model.tanque);  //mais tarde mudar para tanque do jogador 2
+	setPlayerSubwindowCamera(&model.tanque2);  //player2 window2
 	setLight();
 
 	glCallList(model.labirinto[JANELA_P2]);
@@ -692,20 +707,35 @@ void displayPlayer2Subwindow()
 	if (!estado.vista[JANELA_P2])
 	{
 		glPushMatrix();
-		desenhaTanque(model.tanque, JANELA_P2);    //mais tarde mudar para tanque do jogador 2
+		desenhaTanque(model.tanque2, JANELA_P2);    //player2 window2
 
 		int i;
 		for (i = 0; i < NUM_BULLETS; i++)
 		{
-			if (model.tanque.bullets[i].IsAlive)
+			if (model.tanque2.bullets[i].IsAlive)
 			{
 				glPushMatrix();
-				desenhaBullet(model.tanque.bullets[i]);
+				desenhaBullet(model.tanque2.bullets[i]);
 				glPopMatrix();
 			}
 		}
 		glPopMatrix();
 	}
+
+	glPushMatrix();
+	desenhaTanque(model.tanque1, JANELA_P2);    //player1 window2
+
+	int i;
+	for (i = 0; i < NUM_BULLETS; i++)
+	{
+		if (model.tanque1.bullets[i].IsAlive)
+		{
+			glPushMatrix();
+			desenhaBullet(model.tanque1.bullets[i]);
+			glPopMatrix();
+		}
+	}
+	glPopMatrix();
 
 	glutSwapBuffers();
 }
@@ -749,85 +779,85 @@ void Timer(int value)
 	// canhao
 	if (estado.teclas.down)
 	{
-		canonDown(&model.tanque);
+		canonDown(&model.tanque1);
 	}
 	if (estado.teclas.up)
 	{
-		canonUp(&model.tanque);
+		canonUp(&model.tanque1);
 	}
 
 	// torre
 	if (estado.teclas.left)
 	{
-		towerLeft(&model.tanque);
+		towerLeft(&model.tanque1);
 	}
 	if (estado.teclas.right)
 	{
-		towerRight(&model.tanque);
+		towerRight(&model.tanque1);
 	}
 
 	// tanque
 	if (estado.teclas.a)
 	{
-		tankLeft(&model.tanque);
+		tankLeft(&model.tanque1);
 	}
 	if (estado.teclas.d)
 	{
-		tankRight(&model.tanque);
+		tankRight(&model.tanque1);
 	}
 
 	if (estado.teclas.w)	// W ativo
 	{
-		tankFront(&model.tanque);
+		tankFront(&model.tanque1);
 	}
 	else if (!estado.teclas.s)	// W + S inativo
 	{
-		tankSlowDown(&model.tanque);
+		tankSlowDown(&model.tanque1);
 	}
 
 	if (estado.teclas.s)	// S ativo
 	{
-		tankBack(&model.tanque);
+		tankBack(&model.tanque1);
 	}
 
 	if (estado.teclas.espaco)
 	{
-		if (shoot(&model.tanque)) PlaySound("sounds\\fire.wav", NULL, SND_ASYNC | SND_FILENAME);
+		if (shoot(&model.tanque1)) PlaySound("sounds\\fire.wav", NULL, SND_ASYNC | SND_FILENAME);
 	}
 
-	if (model.tanque.IsReloading)
+	if (model.tanque1.IsReloading)
 	{
-		(&model.tanque)->reloadCounter--;
-		(&model.tanque)->IsReloading = model.tanque.reloadCounter > 0;
+		(&model.tanque1)->reloadCounter--;
+		(&model.tanque1)->IsReloading = model.tanque1.reloadCounter > 0;
 	}
 
-	if (model.tanque.IsPowerBoosted)
+	if (model.tanque1.IsPowerBoosted)
 	{
-		(&model.tanque)->powerBoostCounter--;
-		(&model.tanque)->IsPowerBoosted = model.tanque.powerBoostCounter <= 0;
+		(&model.tanque1)->powerBoostCounter--;
+		(&model.tanque1)->IsPowerBoosted = model.tanque1.powerBoostCounter <= 0;
 	}
 
-	if (model.tanque.IsSpeedBoosted)
+	if (model.tanque1.IsSpeedBoosted)
 	{
-		(&model.tanque)->speedBoostCounter--;
-		(&model.tanque)->IsSpeedBoosted = model.tanque.speedBoostCounter <= 0;
+		(&model.tanque1)->speedBoostCounter--;
+		(&model.tanque1)->IsSpeedBoosted = model.tanque1.speedBoostCounter <= 0;
 	}
 
-	nx = model.tanque.x;
-	ny = model.tanque.y;
-	updateTank(&model.tanque);
+	nx = model.tanque1.x;
+	ny = model.tanque1.y;
+	updateTank(&model.tanque1);
 
 
 	//Colisao Bullet
 	for (int i = 0; i < NUM_BULLETS; i++) {
-		detectaColisaoBala((&model.tanque)->bullets[i], (&model.tanque)->bullets[i].x, (&model.tanque)->bullets[i].y, (model.tanque));
+		detectaColisaoBala((&model.tanque1)->bullets[i], (&model.tanque1)->bullets[i].x, (&model.tanque1)->bullets[i].y, (model.tanque1));
 	}
 
 	//Colisao Tanque
-	if (detectaColisaoTanque(model.tanque.x, model.tanque.y, model.tanque)) {
+	if (detectaColisaoTanque(model.tanque1.x, model.tanque1.y, model.tanque1)) {
 
-		model.tanque.x = nx;
-		model.tanque.y = ny;
+		model.tanque1.x = nx;
+		model.tanque1.y = ny;
 	}
 
 
@@ -1168,7 +1198,8 @@ void initModel()
 	model.parado = GL_FALSE;
 	model.andar = GL_FALSE;
 	model.xMouse = model.yMouse = -1;
-	model.tanque.skin = ID_TEXTURA_TANQUE2;
+	model.tanque1.skin = ID_TEXTURA_TANQUE1;
+	model.tanque2.skin = ID_TEXTURA_TANQUE2;
 
 	estado.debug = DEBUG;
 	estado.menuActivo = GL_FALSE;
@@ -1233,6 +1264,8 @@ int main(int argc, char **argv)
 	glutSpecialFunc(SpecialKey);
 	glutSpecialUpFunc(SpecialKeyUp);
 
+	// Start Theme
+	mciSendString("play ./Sounds/metal_theme.wav", NULL, 0, NULL);
 
 	// Player 1 Window
 	// criar a sub window player 1
