@@ -1,0 +1,85 @@
+﻿<tankGame>
+  
+  <options>
+    <player
+      Speed                 = "200"
+      RotationSpeed         = "3"
+      TurrentRotationSpeed  = "2"
+      ShootFreq             = "0.5"
+      Health                = "5"
+      Lives                 = "4"
+    />
+    <bullet 
+      Health  = "1" 
+      Speed   = "400" 
+    />
+    <rotatingSquare
+      RotationSpeed = "0.5"
+    />
+  </options>
+  
+  <levels>
+    
+    <level_1
+      R01 = "W W W W W W W W W W W W W W W W W W W W W W W W W"
+      R02 = "W 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 W"
+      R03 = "W 0 0 0 0 0 0 0 0 S 2 0 W 0 1 S 0 0 0 0 0 0 0 0 W"
+      R04 = "W 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 W"
+      R05 = "W 0 0 0 W W W W W W W W W W W W W W W W W 0 0 0 W"
+      R06 = "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W"
+      R07 = "W 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 W"
+      R08 = "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W"
+      R09 = "W 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 W"
+      R10 = "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W"
+      R11 = "W 0 0 0 W W W W 0 0 0 0 W 0 0 0 0 W W W W 0 0 0 W"
+      R12 = "W 0 0 0 W 0 0 W 0 0 0 0 0 0 0 0 0 W 0 0 W 0 0 0 W"
+      R13 = "W 0 0 0 W W W W 0 0 0 0 S 0 0 0 0 W W W W 0 0 0 W"
+      R14 = "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W"
+      R15 = "W 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 W"
+      R16 = "W 0 0 0 0 0 0 0 0 0 0 W W W 0 0 0 0 0 0 0 0 0 0 W"
+      R17 = "W W W W W W W W W W W W W W W W W W W W W W W W W"   
+    />
+
+    <level_2
+      R01 = "W W W W W W W W W W W W W W W W W W W W W W W W W"
+      R02 = "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W"
+      R03 = "W 0 S 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 S 2 0 W"
+      R04 = "W 0 0 0 0 0 W 0 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 W"
+      R05 = "W 0 0 0 0 W W W 0 0 0 W W W 0 0 0 W W W W W W W W"
+      R06 = "W 0 0 0 W 0 0 0 W W W 0 0 0 W W W 0 0 0 0 0 0 0 W"
+      R07 = "W 0 0 0 0 0 0 0 0 W 0 0 0 0 0 W 0 0 0 0 0 0 0 0 W"
+      R08 = "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W"
+      R09 = "W 0 0 0 0 0 0 0 0 0 0 0 R 0 0 0 0 0 0 0 0 0 0 0 W"
+      R10 = "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W"
+      R11 = "W 0 0 0 0 0 0 0 0 W 0 0 0 0 0 W 0 0 0 0 0 0 0 0 W"
+      R12 = "W 0 0 0 0 0 0 0 W W W 0 0 0 W W W 0 0 0 W 0 0 0 W"
+      R13 = "W W W W W W W W 0 0 0 W W W 0 0 0 W W W 0 0 0 0 W"
+      R14 = "W 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 0 W 0 0 0 0 0 W"
+      R15 = "W 0 1 S 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 S 0 W"
+      R16 = "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W"
+      R17 = "W W W W W W W W W W W W W W W W W W W W W W W W W"
+    />
+
+    <level_3
+      R01 = "R R R R R R R R R R R R R R R R R R R R R R R R R"
+      R02 = "R R R R R 0 0 0 0 0 0 0 R 0 0 0 0 0 0 0 0 0 0 0 R"
+      R03 = "R R R R R 0 S 0 0 0 0 0 R 0 0 0 0 0 0 0 0 0 0 0 R"
+      R04 = "R R R R R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 R"
+      R05 = "R R R R R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 R"
+      R06 = "R R R R R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 R"
+      R07 = "R R R R R 0 0 0 R R R R R R R R R R R R R 0 0 0 R"
+      R08 = "R 0 0 0 R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 R 0 S 0 R"
+      R09 = "R 0 1 0 R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 R 0 2 0 R"
+      R10 = "R 0 S 0 R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 R 0 0 0 R"
+      R11 = "R 0 0 0 R R R R R R R R R R R R R 0 0 0 R R R R R"
+      R12 = "R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 R R R R R"
+      R13 = "R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 R R R R R"
+      R14 = "R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 R R R R R"
+      R15 = "R 0 0 0 0 0 0 0 0 0 0 0 R 0 0 0 0 0 S 0 R R R R R"
+      R16 = "R 0 0 0 0 0 0 0 0 0 0 0 R 0 0 0 0 0 0 0 R R R R R"
+      R17 = "R R R R R R R R R R R R R R R R R R R R R R R R R"
+    />
+    
+  </levels>
+  
+</tankGame>
