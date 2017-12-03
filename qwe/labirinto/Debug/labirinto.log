@@ -1,3 +1,4 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (labirinto.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (labirinto.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   main.cpp
-  labirinto.vcxproj -> C:\Users\Mitsu\source\repos\sgrai-17-18\qwe\Debug\projeto.exe
+  labirinto.vcxproj -> C:\Users\Admin\Documents\Source\Repos\SGRAI-17-18\qwe\Debug\projeto.exe
+  labirinto.vcxproj -> C:\Users\Admin\Documents\Source\Repos\SGRAI-17-18\qwe\Debug\projeto.pdb (Partial PDB)

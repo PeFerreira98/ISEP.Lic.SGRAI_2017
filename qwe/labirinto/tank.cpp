@@ -154,14 +154,13 @@ void updateTank(Tanque *t)
 	updateCooldowns(t);
 }
 
-void checkCollisions(Tanque *tlevabalazio, Tanque *tdispara, Mapa mapa)
+void checkCollisions(Tanque *tlevabalazio, Tanque *tdispara, char mapa[MAZE_HEIGHT][MAZE_WIDTH + 1])
 {
 
 }
 
-void checkCollisions(Bullet *b, Tanque *tlevabalazio, Tanque *tdispara, Mapa mapa)
+void checkCollisions(Bullet *b, Tanque *tlevabalazio, Tanque *tdispara, char mapa[MAZE_HEIGHT][MAZE_WIDTH + 1])
 {
-
 	if (b->x <= tlevabalazio->x + (LARGURA_BASE / 2.0)
 		&& b->x >= tlevabalazio->x - (LARGURA_BASE / 2.0)
 		&& b->y <= tlevabalazio->y + (COMPRIMENTO_BASE / 2.0)
@@ -171,12 +170,12 @@ void checkCollisions(Bullet *b, Tanque *tlevabalazio, Tanque *tdispara, Mapa map
 	}
 	else {
 		int i, j;
-		for (i = 0; i < mapa.height; i++)
+		for (i = 0; i < MAZE_HEIGHT; i++)
 		{
 
-			for (j = 0; j < mapa.width; j++)
+			for (j = 0; j < MAZE_WIDTH; j++)
 			{
-				if (mapa.mapa[i][j] == 'W')
+				if (mapa[i][j] == 'W')
 				{
 					//centro do quadrado na origem
 					if (b->x <= i + (TAMANHO_PAREDE / 2.0)

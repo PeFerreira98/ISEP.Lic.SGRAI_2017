@@ -16,20 +16,25 @@
 ***				Sistema				***
 **************************************/
 
-#define G					0.0981
+//#define G					0.0981
+#define G					0.045
 
 #define DEBUG					1
 #define STEP					1
 
 #define DELAY_MOVIMENTO			6.5
-#define TAMANHO_ARENA			20
+#define TAMANHO_ARENA			100
 #define TAMANHO_PAREDE			1
 
 #define	GAP						25
 
-#define SKY_SIZE				50
-#define MAZE_HEIGHT			    19
-#define MAZE_WIDTH			    19
+#define NUM_JANELAS             2
+#define JANELA_P1               0
+#define JANELA_P2				1
+
+#define SKY_SIZE				120
+#define MAZE_HEIGHT			    TAMANHO_ARENA
+#define MAZE_WIDTH			    TAMANHO_ARENA
 
 #define EYE_ROTACAO			    1
 
@@ -81,12 +86,6 @@
 #define ID_TEXTURA_TANQUE_TIGER		12
 #define ID_TEXTURA_TANQUE_TIGER2	13
 
-
-#define	CHAO_DIMENSAO		    10
-
-#define NUM_JANELAS             2
-#define JANELA_P1               0
-#define JANELA_P2				1
 
 
 /**************************************
@@ -179,8 +178,7 @@
 #define VEL_ROTACAO			1
 #define VEL_ROTACAO_TORRE	1
 #define VEL_ROTACAO_CANHAO	2
-#define VEL_ROTACAO_RODAS	5
-#define VEL_BULLET			2.5
+#define VEL_BULLET			1
 
 #define MAX_VEL				0.001
 #define MAX_ANG_CANHAO		60

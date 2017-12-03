@@ -103,7 +103,7 @@ void reshapePlayerSubwindow(int janela, int width, int height)
 	// Matriz onde se define como o mundo e apresentado na janela
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(estado.fov, (GLfloat)width / height, 0.1, 50);
+	gluPerspective(estado.fov, (GLfloat)width / height, 0.1, 100);
 	// Matriz Modelview
 	// Matriz onde são realizadas as tranformacoes dos modelos desenhados
 	glMatrixMode(GL_MODELVIEW);
@@ -157,7 +157,7 @@ void strokeCenterString(char *str, double x, double y, double z, double s)
 GLboolean detectaColisaoBala(Bullet b, GLfloat nx, GLfloat nz, Tanque t)
 {
 
-	if (model.mapa.mapa[(int)(nx + (MAZE_HEIGHT/2) + 1)][(int)(nz + (MAZE_WIDTH/2) + 1)] >= 'W') {
+	if (model.mapa[(int)(nx + (MAZE_HEIGHT / 2) + 1)][(int)(nz + (MAZE_WIDTH / 2) + 1)] >= 'W') {
 		b.IsAlive = false;
 
 		return GL_TRUE;
@@ -198,56 +198,55 @@ GLboolean detectaColisaoBala(Bullet b, GLfloat nx, GLfloat nz, Tanque t)
 
 GLboolean detectaColisaoTanque(GLfloat nx, GLfloat ny, Tanque t, Tanque t1)
 {
-	if (model.mapa.mapa[(int)(nx + 9 + 1)][(int)(ny + 9+1)] >= 'W' || model.mapa.mapa[(int)(nx + 9 + 1)][(int)(ny + 9 + 1)] >= 'w') {
-
+	if (model.mapa[(int)(nx + 9 + 1)][(int)(ny + 9 + 1)] >= 'W' || model.mapa[(int)(nx + 9 + 1)][(int)(ny + 9 + 1)] >= 'w') {
 
 		return GL_TRUE;
 	}
-	 else if (t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
-	 && t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
-	 && t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
-	 && t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
-	 && t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.y + METADE_ALTURA
-	 &&  t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.y - METADE_ALTURA
+	else if (t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+		&& t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+		&& t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+			&& t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+				&& t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.y + METADE_ALTURA
+					&&  t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.y - METADE_ALTURA
 
-	 && t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
-	 && t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
-	 && t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
-	 && t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
-	 && t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.y + METADE_ALTURA
-	 &&  t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.y - METADE_ALTURA
+						&& t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+						&& t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+						&& t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+							&& t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+								&& t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.y + METADE_ALTURA
+									&&  t.x - (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.y - METADE_ALTURA
 
-	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
-	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
-	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
-	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90)))< t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
-	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.y + METADE_ALTURA
-	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.y - METADE_ALTURA
+										&& t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+									&& t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+								&& t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+								&& t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+								&& t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.y + METADE_ALTURA
+								&& t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.y - METADE_ALTURA
 
-	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
-	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
-	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
-	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90)))< t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
-	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.y + METADE_ALTURA
-	 && t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.y - METADE_ALTURA
+								&& t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+							&& t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+						&& t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+						&& t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+						&& t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) < t1.y + METADE_ALTURA
+						&& t.x - (METADE_LARGURA_BASE * sin(RAD(t.direccao + t.angTorre + 90))) > t1.y - METADE_ALTURA
 
-	 && t.y + METADE_ALTURA < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
-	 && t.y + METADE_ALTURA > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
-	 && t.y + METADE_ALTURA > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
-	 && t.y + METADE_ALTURA < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
-	 && t.y + METADE_ALTURA < t1.y + METADE_ALTURA
-	 && t.y + METADE_ALTURA > t1.y - METADE_ALTURA
+						&& t.y + METADE_ALTURA < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+					&& t.y + METADE_ALTURA > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+				&& t.y + METADE_ALTURA > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+				&& t.y + METADE_ALTURA < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+				&& t.y + METADE_ALTURA < t1.y + METADE_ALTURA
+				&& t.y + METADE_ALTURA > t1.y - METADE_ALTURA
 
-	 && t.y - METADE_ALTURA < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
-	 && t.y - METADE_ALTURA > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
-	 && t.y - METADE_ALTURA > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
-	 && t.y - METADE_ALTURA < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
-	 && t.y - METADE_ALTURA < t1.y + METADE_ALTURA
-	 && t.y - METADE_ALTURA > t1.y - METADE_ALTURA
+				&& t.y - METADE_ALTURA < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+			&& t.y - METADE_ALTURA > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
+		&& t.y - METADE_ALTURA > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+		&& t.y - METADE_ALTURA < t1.x + (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
+		&& t.y - METADE_ALTURA < t1.y + METADE_ALTURA
+		&& t.y - METADE_ALTURA > t1.y - METADE_ALTURA
 
-	 ) {
-	 return GL_TRUE;
-	 }
+		) {
+		return GL_TRUE;
+	}
 
 	return GL_FALSE;
 }
@@ -477,69 +476,67 @@ void desenhaSky(GLuint tex)
 {
 
 	float x, y, z;
-	float width, height, length;
 
 	//x = CHAO_DIMENSAO / 2, y = CHAO_DIMENSAO / 2, z = 0;
 	x = 0, y = 0, z = 0;
-	width = 50, height = 50, length = 50;
 
 	// Center the Skybox around the given x,y,z position
-	x = x - width / 2;
-	y = y - height / 2;
-	z = z - length / 2;
+	x = x - SKY_SIZE / 2;
+	y = y - SKY_SIZE / 2;
+	z = z - SKY_SIZE / 2;
 
 	// Draw Front side
 	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_SKY]);
 	glBegin(GL_QUADS);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z + length);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y, z + length);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z + SKY_SIZE);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + SKY_SIZE, z + SKY_SIZE);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + SKY_SIZE, y + SKY_SIZE, z + SKY_SIZE);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + SKY_SIZE, y, z + SKY_SIZE);
 	glEnd();
 
 	// Draw Back side
 	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_SKY]);
 	glBegin(GL_QUADS);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, z);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + SKY_SIZE, y, z);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + SKY_SIZE, y + SKY_SIZE, z);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + SKY_SIZE, z);
 	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z);
 	glEnd();
 
 	// Draw Left side
 	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_SKY]);
 	glBegin(GL_QUADS);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z + length);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + SKY_SIZE, z);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + SKY_SIZE, z + SKY_SIZE);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z + SKY_SIZE);
 	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z);
 	glEnd();
 
 	// Draw Right side
 	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_SKY]);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y, z);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, z + length);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + SKY_SIZE, y, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + SKY_SIZE, y, z + SKY_SIZE);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + SKY_SIZE, y + SKY_SIZE, z + SKY_SIZE);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + SKY_SIZE, y + SKY_SIZE, z);
 	glEnd();
 
 	// Draw Up side
 	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_SKY]);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + SKY_SIZE, y + SKY_SIZE, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + SKY_SIZE, y + SKY_SIZE, z + SKY_SIZE);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + SKY_SIZE, z + SKY_SIZE);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + SKY_SIZE, z);
 	glEnd();
 
 	// Draw Down side
 	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_SKY]);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z + length);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y, z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z + SKY_SIZE);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + SKY_SIZE, y, z + SKY_SIZE);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + SKY_SIZE, y, z);
 	glEnd();
 
 
@@ -653,14 +650,14 @@ void desenhaLabirintoElemento(char element, int x, int y)
 		int cx = 0, cy = 1;
 		while (true)
 		{
-			if (model.mapa.mapa[x + cx][y + cy] == LAB_HOUSE2)
+			if (model.mapa[x + cx][y + cy] == LAB_HOUSE2)
 			{
 				cy++;
 				sizeY = cy > sizeY ? cy : sizeY;
 			}
 			else
 			{
-				if (model.mapa.mapa[x + cx + 1][y] == LAB_HOUSE2)
+				if (model.mapa[x + cx + 1][y] == LAB_HOUSE2)
 				{
 					cx++;
 					cy = 0;
@@ -686,11 +683,11 @@ void desenhaLabirinto()
 	{
 		for (j = 0; j < MAZE_WIDTH; j++)
 		{
-			if (model.mapa.mapa[i][j] != LAB_VAZIO)
+			if (model.mapa[i][j] != LAB_VAZIO)
 			{
 				glPushMatrix();
 				glTranslatef(j - (MAZE_WIDTH / 2), i - (MAZE_HEIGHT / 2), 0.5);
-				desenhaLabirintoElemento(model.mapa.mapa[i][j], i, j);
+				desenhaLabirintoElemento(model.mapa[i][j], i, j);
 				glPopMatrix();
 			}
 		}
@@ -698,16 +695,26 @@ void desenhaLabirinto()
 }
 
 
-void desenhaChao(GLfloat dimensao, GLuint texID)
+void desenhaChao()
 {
 	// código para desenhar o chão
-	GLfloat i, j;
-	glBindTexture(GL_TEXTURE_2D, texID);
+	int i, j;
+	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_CHAO]);
 
 	glColor3f(1.0f, 1.0f, 1.0f);
-	for (i = -dimensao; i <= dimensao; i += STEP)
-		for (j = -dimensao; j <= dimensao; j += STEP)
+	for (i = -TAMANHO_ARENA / 2.0; i <= TAMANHO_ARENA / 2.0; i += STEP)
+		for (j = -TAMANHO_ARENA / 2.0; j <= TAMANHO_ARENA / 2.0; j += STEP)
 		{
+			//char e = model.mapa[i][j];
+			//if (e == LAB_POWER)
+			//	glColor4i(255, 0, 0, 1);
+			//else if (e == LAB_SHILED)
+			//	glColor4i(0, 0, 255, 1);
+			//else if (e == LAB_SPEED)
+			//	glColor4i(0, 255, 0, 1);
+			//else
+			//	glColor4i(255, 255, 255, 1);
+
 			glBegin(GL_POLYGON);
 			glNormal3f(0, 0, 1);
 
@@ -725,6 +732,7 @@ void desenhaChao(GLfloat dimensao, GLuint texID)
 
 			glEnd();
 		}
+	glColor4i(255, 255, 255, 1);
 	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
@@ -1030,7 +1038,7 @@ void Timer(int value)
 	}
 
 	//Colisao Tanque
-	if (detectaColisaoTanque(model.tanque1.x, model.tanque1.y, model.tanque1,model.tanque2)) {
+	if (detectaColisaoTanque(model.tanque1.x, model.tanque1.y, model.tanque1, model.tanque2)) {
 		model.tanque1.x = nx1;
 		model.tanque1.y = ny1;
 
@@ -1271,7 +1279,7 @@ void createDisplayLists(int janelaID)
 	model.chao = glGenLists(1);
 	glNewList(model.chao, GL_COMPILE);
 	glPushAttrib(GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT);
-	desenhaChao(CHAO_DIMENSAO, model.texID[ID_TEXTURA_CHAO]);
+	desenhaChao();
 	glPopAttrib();
 	glEndList();
 }
@@ -1560,7 +1568,7 @@ void init()
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_NORMALIZE);  // por causa do Scale
 
-	
+
 
 	if (glutGetWindow() == estado.mainWindow)
 		glClearColor(0.8f, 0.8f, 0.8f, 0.0f);
