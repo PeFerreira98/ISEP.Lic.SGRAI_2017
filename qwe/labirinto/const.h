@@ -31,10 +31,6 @@
 #define MAZE_HEIGHT			    19
 #define MAZE_WIDTH			    19
 
-#define	OBJECTO_ALTURA		    0.4
-#define OBJECTO_VELOCIDADE	    0.5
-#define OBJECTO_ROTACAO		    5
-#define OBJECTO_RAIO		    0.12
 #define EYE_ROTACAO			    1
 
 #define DISTANCIA_CAMERA		2

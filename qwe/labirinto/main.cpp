@@ -62,7 +62,7 @@ void reshapePlayerSubwindow(int janela, int width, int height)
 	// Matriz onde se define como o mundo e apresentado na janela
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(estado.camera[janela].fov, (GLfloat)width / height, 0.1, 50);
+	gluPerspective(estado.fov, (GLfloat)width / height, 0.1, 50);
 	// Matriz Modelview
 	// Matriz onde são realizadas as tranformacoes dos modelos desenhados
 	glMatrixMode(GL_MODELVIEW);
@@ -358,6 +358,18 @@ void desenhaBullet(Bullet b)
 	glPopMatrix();
 }
 
+void desenhaBalas(Tanque t)
+{
+	int i;
+	for (i = 0; i < NUM_BULLETS; i++)
+	{
+		if (model.tanque1.bullets[i].IsAlive)
+		{
+			desenhaBullet(t.bullets[i]);
+		}
+	}
+}
+
 void desenhaShield()
 {
 	glPushMatrix();
@@ -377,23 +389,15 @@ void desenhaShield()
 	glPopMatrix();
 }
 
-void desenhaTanque(Tanque t, GLuint janela)
+void desenhaTanque(Tanque t)
 {
 	glPushMatrix();
-	/*GLUquadric *quad;
-	quad = gluNewQuadric();
-	gluQuadricDrawStyle(quad, GLU_FILL);
-	gluCylinder(quad, 0.5, 0.5, 0.4, 20, 2);*/
-
-	//rodas
-	//glTranslatef(t.x, t.y, 0);
 
 	// base
 	glTranslatef(t.x, t.y, ALTURA_BASE / 2.0);
 	glRotatef(t.direccao, 0, 0, 1); //tanque
 	glPushMatrix();
 	glScalef(LARGURA_BASE, COMPRIMENTO_BASE, ALTURA_BASE);
-	//desenhaCubo(model.texID[janela][t.skin], 0, 1);
 	desenhaCubo(model.texID[t.skin], 0, 1);
 	glPopMatrix();
 
@@ -421,7 +425,6 @@ void desenhaTanque(Tanque t, GLuint janela)
 	if (t.IsShieldActive)
 	{
 		desenhaShield();
-
 	}
 	glPopMatrix();
 }
@@ -638,7 +641,6 @@ void desenhaLabirinto()
 	// código para desenhar o labirinto
 	int i, j;
 
-	//glColor3f(1.0f, 1.0f, 1.0f);
 	for (i = 0; i < MAZE_HEIGHT; i++)
 	{
 		for (j = 0; j < MAZE_WIDTH; j++)
@@ -685,21 +687,42 @@ void desenhaChao(GLfloat dimensao, GLuint texID)
 	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
+void desenhaModels()
+{
+	glPushMatrix();
+	desenhaSky(estado.dia ? model.texID[ID_TEXTURA_SKY] : model.texID[ID_TEXTURA_SKY_NIGHT]);
+	desenhaLabirinto();
+	desenhaTanque(model.tanque1); //player1 window2
+
+	int i;
+	for (i = 0; i < NUM_BULLETS; i++)
+	{
+		if (model.tanque1.bullets[i].IsAlive)
+		{
+			glPushMatrix();
+			desenhaBullet(model.tanque1.bullets[i]);
+			glPopMatrix();
+		}
+	}
+	glPopMatrix();
+
+	glPushMatrix();
+	desenhaTanque(model.tanque2); //player1 window2
+
+	for (i = 0; i < NUM_BULLETS; i++)
+	{
+		if (model.tanque2.bullets[i].IsAlive)
+		{
+			glPushMatrix();
+			desenhaBullet(model.tanque2.bullets[i]);
+			glPopMatrix();
+		}
+	}
+	glPopMatrix();
+}
+
 
 /////////////////////////////////////
-//navigateSubwindow
-
-//void motionNavigateSubwindow(int x, int y)
-//{
-//
-//}
-//
-//
-//void mouseNavigateSubwindow(int button, int estado, int x, int y)
-//{
-//
-//}
-
 
 void setPlayerSubwindowCamera(Tanque *t)
 {
@@ -716,49 +739,19 @@ void setPlayerSubwindowCamera(Tanque *t)
 
 void displayPlayer1Subwindow()
 {
+	setPlayerSubwindowCamera(&model.tanque1);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glLoadIdentity();
 
 	setPlayerSubwindowCamera(&model.tanque1); //player1 window2
+
 	setLight();
 
-	glCallList(model.labirinto[JANELA_P1]);
-	glCallList(model.chao[JANELA_P1]);
+	glCallList(model.chao);
 
-	if (!estado.vista[JANELA_P1])
-	{
-		glPushMatrix();
-		desenhaSky(estado.dia ? model.texID[ID_TEXTURA_SKY] : model.texID[ID_TEXTURA_SKY_NIGHT]);
-		desenhaTanque(model.tanque1, JANELA_P1); //player1 window2
-
-		int i;
-		for (i = 0; i < NUM_BULLETS; i++)
-		{
-			if (model.tanque1.bullets[i].IsAlive)
-			{
-				glPushMatrix();
-				desenhaBullet(model.tanque1.bullets[i]);
-				glPopMatrix();
-			}
-		}
-		glPopMatrix();
-	}
-
-	glPushMatrix();
-	desenhaTanque(model.tanque2, JANELA_P1); //player1 window2
-
-	int i;
-	for (i = 0; i < NUM_BULLETS; i++)
-	{
-		if (model.tanque2.bullets[i].IsAlive)
-		{
-			glPushMatrix();
-			desenhaBullet(model.tanque2.bullets[i]);
-			glPopMatrix();
-		}
-	}
-	glPopMatrix();
+	desenhaModels();
 
 	glutSwapBuffers();
 }
@@ -770,44 +763,12 @@ void displayPlayer2Subwindow()
 	glLoadIdentity();
 
 	setPlayerSubwindowCamera(&model.tanque2);  //player2 window2
+
 	setLight();
 
-	glCallList(model.labirinto[JANELA_P2]);
-	glCallList(model.chao[JANELA_P2]);
+	glCallList(model.chao);
 
-	if (!estado.vista[JANELA_P2])
-	{
-		glPushMatrix();
-		desenhaSky(estado.dia ? model.texID[ID_TEXTURA_SKY] : model.texID[ID_TEXTURA_SKY_NIGHT]);
-		desenhaTanque(model.tanque2, JANELA_P2);    //player2 window2
-
-		int i;
-		for (i = 0; i < NUM_BULLETS; i++)
-		{
-			if (model.tanque2.bullets[i].IsAlive)
-			{
-				glPushMatrix();
-				desenhaBullet(model.tanque2.bullets[i]);
-				glPopMatrix();
-			}
-		}
-		glPopMatrix();
-	}
-
-	glPushMatrix();
-	desenhaTanque(model.tanque1, JANELA_P2);    //player1 window2
-
-	int i;
-	for (i = 0; i < NUM_BULLETS; i++)
-	{
-		if (model.tanque1.bullets[i].IsAlive)
-		{
-			glPushMatrix();
-			desenhaBullet(model.tanque1.bullets[i]);
-			glPopMatrix();
-		}
-	}
-	glPopMatrix();
+	desenhaModels();
 
 	glutSwapBuffers();
 }
@@ -1187,9 +1148,9 @@ void SpecialKey(int key, int x, int y)
 	case GLUT_KEY_RIGHT: estado.teclas.right = GL_TRUE;
 		break;
 
-	case GLUT_KEY_F1: estado.vista[JANELA_P1] = !estado.vista[JANELA_P1];
+	case GLUT_KEY_F1:
 		break;
-	case GLUT_KEY_F2: estado.vista[JANELA_P2] = !estado.vista[JANELA_P2];
+	case GLUT_KEY_F2:
 		break;
 	case GLUT_KEY_F3: imprime_ajuda();
 		break;
@@ -1197,10 +1158,9 @@ void SpecialKey(int key, int x, int y)
 		break;
 
 	case GLUT_KEY_PAGE_UP:
-		if (estado.camera[JANELA_P1].fov > 60 || estado.camera[JANELA_P2].fov > 60)
+		if (estado.fov > 60 || estado.fov > 60)
 		{
-			estado.camera[JANELA_P1].fov--;
-			estado.camera[JANELA_P2].fov--;
+			estado.fov--;
 			glutSetWindow(estado.player1Subwindow);
 			reshapePlayer1Subwindow(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 			glutSetWindow(estado.player2Subwindow);
@@ -1209,10 +1169,9 @@ void SpecialKey(int key, int x, int y)
 		}
 		break;
 	case GLUT_KEY_PAGE_DOWN:
-		if (estado.camera[JANELA_P1].fov < 120 || estado.camera[JANELA_P2].fov < 120)
+		if (estado.fov < 120 || estado.fov < 120)
 		{
-			estado.camera[JANELA_P1].fov++;
-			estado.camera[JANELA_P2].fov++;
+			estado.fov++;
 			glutSetWindow(estado.player1Subwindow);
 			reshapePlayerSubwindow(JANELA_P1, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 			glutSetWindow(estado.player2Subwindow);
@@ -1244,15 +1203,8 @@ void SpecialKeyUp(int key, int x, int y)
 
 void createDisplayLists(int janelaID)
 {
-	model.labirinto[janelaID] = glGenLists(2);
-	glNewList(model.labirinto[janelaID], GL_COMPILE);
-	glPushAttrib(GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT);
-	desenhaLabirinto();
-	glPopAttrib();
-	glEndList();
-
-	model.chao[janelaID] = model.labirinto[janelaID] + 1;
-	glNewList(model.chao[janelaID], GL_COMPILE);
+	model.chao = glGenLists(1);
+	glNewList(model.chao, GL_COMPILE);
 	glPushAttrib(GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT);
 	desenhaChao(CHAO_DIMENSAO, model.texID[ID_TEXTURA_CHAO]);
 	glPopAttrib();
@@ -1521,12 +1473,9 @@ void initModel()
 	estado.teclas.a = estado.teclas.w = estado.teclas.s = estado.teclas.d = \
 		estado.teclas.up = estado.teclas.down = estado.teclas.left = estado.teclas.right = GL_FALSE;
 
-	estado.camera[0].fov = 100;
-	estado.camera[1].fov = 100;
+	estado.fov = 100;
 
 	estado.localViewer = 1;
-	estado.vista[JANELA_P1] = 0;
-	estado.vista[JANELA_P2] = 0;
 }
 
 void init()
@@ -1588,7 +1537,6 @@ int main(int argc, char **argv)
 	setLight();
 	setMaterial();
 
-	//createTextures(model.texID[JANELA_P1]);
 	createTextures(model.texID);
 	createDisplayLists(JANELA_P1);
 
@@ -1610,7 +1558,6 @@ int main(int argc, char **argv)
 	setLight();
 	setMaterial();
 
-	//createTextures(model.texID[JANELA_P2]);
 	createTextures(model.texID);
 	createDisplayLists(JANELA_P2);
 

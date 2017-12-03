@@ -76,19 +76,12 @@ typedef struct {
 }Tanque;
 
 typedef struct {
-	Pos      eye, center, up;
-	GLfloat  dir_long;  // longitude olhar (esq-dir)
-	GLfloat  dir_lat;   // latitude olhar	(cima-baixo)
-	GLfloat  fov;
-}Camera;
-
-typedef struct {
-	Camera      camera[NUM_JANELAS];
+	//Camera      camera[NUM_JANELAS];
+	GLfloat		fov;
 	GLint       mainWindow, topSubwindow, navigateSubwindow, player1Subwindow, player2Subwindow;
 	Teclas      teclas;
 	GLboolean	localViewer;
-	GLuint		vista[NUM_JANELAS];
-	GLboolean   doubleBuffer;
+	//GLboolean   doubleBuffer;
 	GLint       delayMovimento;
 	GLuint      menu_id;
 	GLboolean   menuActivo;
@@ -126,9 +119,10 @@ typedef struct {
 	//GLuint			texID[NUM_JANELAS][NUM_TEXTURAS];
 	GLuint			texID[NUM_TEXTURAS];
 
-	GLuint			labirinto[NUM_JANELAS];
-	GLuint			chao[NUM_JANELAS];
-	GLuint			skybox[NUM_JANELAS];
+	//GLuint			labirinto[NUM_JANELAS];
+	//GLuint			chao[NUM_JANELAS];
+	//GLuint			skybox[NUM_JANELAS];
+	GLuint			chao;
 
 	GLuint			xMouse;
 	GLuint			yMouse;
