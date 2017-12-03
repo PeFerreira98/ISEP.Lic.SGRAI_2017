@@ -1627,7 +1627,7 @@ int main(int argc, char **argv)
 	glutSpecialUpFunc(SpecialKeyUp);
 
 	// Start Theme
-	//mciSendString("play ./Sounds/metal_theme.wav", NULL, 0, NULL);
+	mciSendString("play ./Sounds/metal_theme.wav", NULL, 0, NULL);
 
 	// Player 1 Window
 	// criar a sub window player 1
