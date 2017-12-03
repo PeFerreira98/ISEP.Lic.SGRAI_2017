@@ -94,6 +94,7 @@ typedef struct {
 	GLboolean   menuActivo;
 	GLboolean   debug;
 	GLboolean   ortho;
+	GLboolean	dia;
 }Estado;
 
 typedef struct {

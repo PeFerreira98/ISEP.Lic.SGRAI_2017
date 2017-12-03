@@ -429,11 +429,13 @@ void desenhaTanque(Tanque t, GLuint janela)
 
 // Mapa
 
-void desenhaSky()
+void desenhaSky(GLuint tex)
 {
+
 	float x, y, z;
 	float width, height, length;
 
+	//x = CHAO_DIMENSAO / 2, y = CHAO_DIMENSAO / 2, z = 0;
 	x = 0, y = 0, z = 0;
 	width = 50, height = 50, length = 50;
 
@@ -496,6 +498,8 @@ void desenhaSky()
 	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y, z);
 	glEnd();
 
+
+	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
 void desenhaPowerUpSymbol()
@@ -725,6 +729,7 @@ void displayPlayer1Subwindow()
 	if (!estado.vista[JANELA_P1])
 	{
 		glPushMatrix();
+		desenhaSky(estado.dia ? model.texID[ID_TEXTURA_SKY] : model.texID[ID_TEXTURA_SKY_NIGHT]);
 		desenhaTanque(model.tanque1, JANELA_P1); //player1 window2
 
 		int i;
@@ -773,6 +778,7 @@ void displayPlayer2Subwindow()
 	if (!estado.vista[JANELA_P2])
 	{
 		glPushMatrix();
+		desenhaSky(estado.dia ? model.texID[ID_TEXTURA_SKY] : model.texID[ID_TEXTURA_SKY_NIGHT]);
 		desenhaTanque(model.tanque2, JANELA_P2);    //player2 window2
 
 		int i;
@@ -999,7 +1005,7 @@ void Timer(int value)
 	for (int i = 0; i < NUM_BULLETS; i++) {
 		if (detectaColisaoBala((&model.tanque1)->bullets[i], (&model.tanque1)->bullets[i].x, (&model.tanque1)->bullets[i].y, (model.tanque1))) {
 			printf("colision detected bullet %d\n", i); //FIXME return always true
-			//PlaySound("sounds\\impact.wav", NULL, SND_ASYNC | SND_FILENAME);
+														//PlaySound("sounds\\impact.wav", NULL, SND_ASYNC | SND_FILENAME);
 		}
 	}
 
@@ -1009,7 +1015,7 @@ void Timer(int value)
 		model.tanque1.y = ny1;
 
 		printf("wall colision detected \n"); //FIX ME detects colision middle map
-		//PlaySound("sounds\\wallhit.wav", NULL, SND_ASYNC | SND_FILENAME);
+											 //PlaySound("sounds\\wallhit.wav", NULL, SND_ASYNC | SND_FILENAME);
 	}
 
 
@@ -1249,7 +1255,6 @@ void createDisplayLists(int janelaID)
 	glNewList(model.chao[janelaID], GL_COMPILE);
 	glPushAttrib(GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT);
 	desenhaChao(CHAO_DIMENSAO, model.texID[ID_TEXTURA_CHAO]);
-	desenhaSky(); //Temp
 	glPopAttrib();
 	glEndList();
 }
@@ -1376,29 +1381,16 @@ void createTextures(GLuint texID[])
 		exit(0);
 	}
 
-	if (read_JPEG_file(NOME_TEXTURA_TANQUE1, &image, &w, &h, &bpp))
+	if (read_JPEG_file(NOME_TEXTURA_PAREDE2, &image, &w, &h, &bpp))
 	{
-		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE1]);
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_PAREDE2]);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
 	}
 	else {
-		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE1);
-		exit(0);
-	}
-
-	if (read_JPEG_file(NOME_TEXTURA_TANQUE2, &image, &w, &h, &bpp))
-	{
-		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE2]);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
-	}
-	else {
-		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE2);
+		printf("Textura %s not Found\n", NOME_TEXTURA_PAREDE2);
 		exit(0);
 	}
 
@@ -1415,6 +1407,100 @@ void createTextures(GLuint texID[])
 		exit(0);
 	}
 
+	if (read_JPEG_file(NOME_TEXTURA_SKY_NIGHT, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_SKY_NIGHT]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_SKY_NIGHT);
+		exit(0);
+	}
+
+	// Tanque
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE_HEXA, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE_HEXA]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE_HEXA);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE_CAMO, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE_CAMO]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE_CAMO);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE_DESERT, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE_DESERT]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE_DESERT);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE_STRIPE, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE_STRIPE]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE_STRIPE);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE_TIGER, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE_TIGER]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE_TIGER);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE_TIGER2, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE_TIGER2]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE_TIGER2);
+		exit(0);
+	}
+
+
 	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
@@ -1425,8 +1511,8 @@ void initModel()
 	model.parado = GL_FALSE;
 	model.andar = GL_FALSE;
 	model.xMouse = model.yMouse = -1;
-	model.tanque1.skin = ID_TEXTURA_TANQUE1;
-	model.tanque2.skin = ID_TEXTURA_TANQUE2;
+	model.tanque1.skin = ID_TEXTURA_TANQUE_HEXA;
+	model.tanque2.skin = ID_TEXTURA_TANQUE_CAMO;
 
 	estado.debug = DEBUG;
 	estado.menuActivo = GL_FALSE;
