@@ -868,21 +868,9 @@ void displayMainWindow()
 	glutSwapBuffers();
 }
 
-void Timer(int value)
-{
-	GLfloat nx = 0, ny = 0, nz = 0, nx1 = 0, ny1 = 0, nz1 = 0;
-	GLboolean andar = GL_FALSE;
-
-	GLuint curr = glutGet(GLUT_ELAPSED_TIME);
-
-	glutTimerFunc(estado.delayMovimento, Timer, 0);
-	model.prev = curr;
-
-	if (model.powerUpRotation++ == 360) model.powerUpRotation = 0;
 
 
-	//if (estado.menuActivo || model.parado) // sair em caso de o jogo estar parado ou menu estar activo
-	//	return;
+void TimerMovTanque1() {
 
 	// canhao
 	if (estado.teclas.g)
@@ -927,7 +915,10 @@ void Timer(int value)
 	{
 		tankBack(&model.tanque1);
 	}
+
+
 }
+
 
 void TimerMovTanque2() {
 
@@ -974,6 +965,8 @@ void TimerMovTanque2() {
 	{
 		tankBack(&model.tanque2);
 	}
+
+
 }
 
 void Timer(int value)
@@ -1070,7 +1063,7 @@ void Timer(int value)
 	}
 
 	//Colisao Tanque
-	if (detectaColisaoTanque(model.tanque1.x, model.tanque1.y, model.tanque1)) {
+	if (detectaColisaoTanque(model.tanque1.x, model.tanque1.y, model.tanque1,model.tanque2)) {
 		model.tanque1.x = nx1;
 		model.tanque1.y = ny1;
 

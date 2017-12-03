@@ -139,7 +139,7 @@ typedef struct {
 	Tanque			tanque2;
 	GLboolean		parado;
 	Mapa			mapa;
-	GLfloat light_pos[4] = { MAZE_HEIGHT,  MAZE_HEIGHT, 10, 1 };
+	GLfloat light_pos[4] = { MAZE_HEIGHT,  MAZE_HEIGHT, 15, 1 };
 
 
 
