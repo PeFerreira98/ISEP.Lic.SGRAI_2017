@@ -127,6 +127,8 @@ typedef struct {
 
 	GLuint			labirinto[NUM_JANELAS];
 	GLuint			chao[NUM_JANELAS];
+	GLuint			skybox[NUM_JANELAS];
+
 	GLuint			xMouse;
 	GLuint			yMouse;
 	GLboolean		andar;

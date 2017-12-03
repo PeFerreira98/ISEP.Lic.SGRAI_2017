@@ -55,8 +55,9 @@
 #define NOME_TEXTURA_PAREDE			"texturas\\wall.jpg"
 #define NOME_TEXTURA_TANQUE1		"texturas\\hexa_camo.jpg"
 #define NOME_TEXTURA_TANQUE2		"texturas\\camo.jpg"
+#define NOME_TEXTURA_SKY			"texturas\\sky.jpg"
 
-#define NUM_TEXTURAS            7
+#define NUM_TEXTURAS            8
 #define ID_TEXTURA_CUBOS        0
 #define ID_TEXTURA_CHAO         1
 #define ID_TEXTURA_CASA			2
@@ -64,6 +65,7 @@
 #define ID_TEXTURA_PAREDE		4
 #define ID_TEXTURA_TANQUE1		5
 #define ID_TEXTURA_TANQUE2		6
+#define ID_TEXTURA_SKY			7
 
 #define	CHAO_DIMENSAO		    10
 

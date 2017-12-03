@@ -429,6 +429,75 @@ void desenhaTanque(Tanque t, GLuint janela)
 
 // Mapa
 
+void desenhaSky()
+{
+	float x, y, z;
+	float width, height, length;
+
+	x = 0, y = 0, z = 0;
+	width = 50, height = 50, length = 50;
+
+	// Center the Skybox around the given x,y,z position
+	x = x - width / 2;
+	y = y - height / 2;
+	z = z - length / 2;
+
+	// Draw Front side
+	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_SKY]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y, z + length);
+	glEnd();
+
+	// Draw Back side
+	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_SKY]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, z);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z);
+	glEnd();
+
+	// Draw Left side
+	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_SKY]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z + length);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z + length);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z);
+	glEnd();
+
+	// Draw Right side
+	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_SKY]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
+	glEnd();
+
+	// Draw Up side
+	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_SKY]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z);
+	glEnd();
+
+	// Draw Down side
+	glBindTexture(GL_TEXTURE_2D, model.texID[ID_TEXTURA_SKY]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y, z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y, z);
+	glEnd();
+
+}
+
 void desenhaPowerUpSymbol()
 {
 	glPushMatrix();
@@ -1180,6 +1249,7 @@ void createDisplayLists(int janelaID)
 	glNewList(model.chao[janelaID], GL_COMPILE);
 	glPushAttrib(GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT);
 	desenhaChao(CHAO_DIMENSAO, model.texID[ID_TEXTURA_CHAO]);
+	desenhaSky(); //Temp
 	glPopAttrib();
 	glEndList();
 }
@@ -1332,6 +1402,19 @@ void createTextures(GLuint texID[])
 		exit(0);
 	}
 
+	if (read_JPEG_file(NOME_TEXTURA_SKY, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_SKY]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_SKY);
+		exit(0);
+	}
+
 	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
@@ -1409,7 +1492,7 @@ int main(int argc, char **argv)
 	glutSpecialUpFunc(SpecialKeyUp);
 
 	// Start Theme
-	mciSendString("play ./Sounds/metal_theme.wav", NULL, 0, NULL);
+	//mciSendString("play ./Sounds/metal_theme.wav", NULL, 0, NULL);
 
 	// Player 1 Window
 	// criar a sub window player 1
