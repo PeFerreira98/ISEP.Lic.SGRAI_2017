@@ -27,13 +27,10 @@
 
 #define	GAP						25
 
+#define SKY_SIZE				50
 #define MAZE_HEIGHT			    19
 #define MAZE_WIDTH			    19
 
-#define	OBJECTO_ALTURA		    0.4
-#define OBJECTO_VELOCIDADE	    0.5
-#define OBJECTO_ROTACAO		    5
-#define OBJECTO_RAIO		    0.12
 #define EYE_ROTACAO			    1
 
 #define DISTANCIA_CAMERA		2
@@ -49,23 +46,41 @@
 #define NOME_TEXTURA_CUBOS        "texturas\\cubo.jpg"
 #endif
 
-#define NOME_TEXTURA_CHAO			"texturas\\chao.jpg"
-#define NOME_TEXTURA_CASA			"texturas\\house.jpg"
-#define NOME_TEXTURA_TELHADO		"texturas\\roof.jpg"
-#define NOME_TEXTURA_PAREDE			"texturas\\wall.jpg"
-#define NOME_TEXTURA_TANQUE1		"texturas\\hexa_camo.jpg"
-#define NOME_TEXTURA_TANQUE2		"texturas\\camo.jpg"
-#define NOME_TEXTURA_SKY			"texturas\\sky.jpg"
+//#define NOME_TEXTURA_CHAO			"texturas\\chao.jpg"
+#define NOME_TEXTURA_CHAO				"texturas\\floor.jpg"
+#define NOME_TEXTURA_CASA				"texturas\\house.jpg"
+#define NOME_TEXTURA_TELHADO			"texturas\\roof.jpg"
+#define NOME_TEXTURA_PAREDE				"texturas\\wall.jpg"
+#define NOME_TEXTURA_PAREDE2			"texturas\\wall2.jpg"
+#define NOME_TEXTURA_SKY				"texturas\\sky.jpg"
+#define NOME_TEXTURA_SKY_NIGHT			"texturas\\night_sky.jpg"
 
-#define NUM_TEXTURAS            8
-#define ID_TEXTURA_CUBOS        0
-#define ID_TEXTURA_CHAO         1
-#define ID_TEXTURA_CASA			2
-#define ID_TEXTURA_TELHADO		3
-#define ID_TEXTURA_PAREDE		4
-#define ID_TEXTURA_TANQUE1		5
-#define ID_TEXTURA_TANQUE2		6
-#define ID_TEXTURA_SKY			7
+#define NOME_TEXTURA_TANQUE_HEXA		"texturas\\hexa_camo.jpg"
+#define NOME_TEXTURA_TANQUE_CAMO		"texturas\\camo.jpg"
+#define NOME_TEXTURA_TANQUE_DESERT		"texturas\\desert_camo.jpg"
+#define NOME_TEXTURA_TANQUE_STRIPE		"texturas\\stripe_camo.jpg"
+#define NOME_TEXTURA_TANQUE_TIGER		"texturas\\tiger.jpg"
+#define NOME_TEXTURA_TANQUE_TIGER2		"texturas\\tiger2.jpg"
+
+
+#define NUM_TEXTURAS				14
+
+#define ID_TEXTURA_CUBOS			0
+#define ID_TEXTURA_CHAO				1
+#define ID_TEXTURA_CASA				2
+#define ID_TEXTURA_TELHADO			3
+#define ID_TEXTURA_PAREDE			4
+#define ID_TEXTURA_PAREDE2			5
+#define ID_TEXTURA_SKY				6
+#define ID_TEXTURA_SKY_NIGHT		7
+
+#define ID_TEXTURA_TANQUE_HEXA		8
+#define ID_TEXTURA_TANQUE_CAMO		9
+#define ID_TEXTURA_TANQUE_DESERT	10
+#define ID_TEXTURA_TANQUE_STRIPE	11
+#define ID_TEXTURA_TANQUE_TIGER		12
+#define ID_TEXTURA_TANQUE_TIGER2	13
+
 
 #define	CHAO_DIMENSAO		    10
 

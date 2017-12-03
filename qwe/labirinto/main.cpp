@@ -103,7 +103,7 @@ void reshapePlayerSubwindow(int janela, int width, int height)
 	// Matriz onde se define como o mundo e apresentado na janela
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(estado.camera[janela].fov, (GLfloat)width / height, 0.1, 50);
+	gluPerspective(estado.fov, (GLfloat)width / height, 0.1, 50);
 	// Matriz Modelview
 	// Matriz onde são realizadas as tranformacoes dos modelos desenhados
 	glMatrixMode(GL_MODELVIEW);
@@ -399,6 +399,18 @@ void desenhaBullet(Bullet b)
 	glPopMatrix();
 }
 
+void desenhaBalas(Tanque t)
+{
+	int i;
+	for (i = 0; i < NUM_BULLETS; i++)
+	{
+		if (model.tanque1.bullets[i].IsAlive)
+		{
+			desenhaBullet(t.bullets[i]);
+		}
+	}
+}
+
 void desenhaShield()
 {
 	glPushMatrix();
@@ -418,23 +430,15 @@ void desenhaShield()
 	glPopMatrix();
 }
 
-void desenhaTanque(Tanque t, GLuint janela)
+void desenhaTanque(Tanque t)
 {
 	glPushMatrix();
-	/*GLUquadric *quad;
-	quad = gluNewQuadric();
-	gluQuadricDrawStyle(quad, GLU_FILL);
-	gluCylinder(quad, 0.5, 0.5, 0.4, 20, 2);*/
-
-	//rodas
-	//glTranslatef(t.x, t.y, 0);
 
 	// base
 	glTranslatef(t.x, t.y, ALTURA_BASE / 2.0);
 	glRotatef(t.direccao, 0, 0, 1); //tanque
 	glPushMatrix();
 	glScalef(LARGURA_BASE, COMPRIMENTO_BASE, ALTURA_BASE);
-	//desenhaCubo(model.texID[janela][t.skin], 0, 1);
 	desenhaCubo(model.texID[t.skin], 0, 1);
 	glPopMatrix();
 
@@ -462,7 +466,6 @@ void desenhaTanque(Tanque t, GLuint janela)
 	if (t.IsShieldActive)
 	{
 		desenhaShield();
-
 	}
 	glPopMatrix();
 }
@@ -470,11 +473,13 @@ void desenhaTanque(Tanque t, GLuint janela)
 
 // Mapa
 
-void desenhaSky()
+void desenhaSky(GLuint tex)
 {
+
 	float x, y, z;
 	float width, height, length;
 
+	//x = CHAO_DIMENSAO / 2, y = CHAO_DIMENSAO / 2, z = 0;
 	x = 0, y = 0, z = 0;
 	width = 50, height = 50, length = 50;
 
@@ -537,6 +542,8 @@ void desenhaSky()
 	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y, z);
 	glEnd();
 
+
+	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
 void desenhaPowerUpSymbol()
@@ -675,7 +682,6 @@ void desenhaLabirinto()
 	// código para desenhar o labirinto
 	int i, j;
 
-	//glColor3f(1.0f, 1.0f, 1.0f);
 	for (i = 0; i < MAZE_HEIGHT; i++)
 	{
 		for (j = 0; j < MAZE_WIDTH; j++)
@@ -722,21 +728,42 @@ void desenhaChao(GLfloat dimensao, GLuint texID)
 	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
+void desenhaModels()
+{
+	glPushMatrix();
+	desenhaSky(estado.dia ? model.texID[ID_TEXTURA_SKY] : model.texID[ID_TEXTURA_SKY_NIGHT]);
+	desenhaLabirinto();
+	desenhaTanque(model.tanque1); //player1 window2
+
+	int i;
+	for (i = 0; i < NUM_BULLETS; i++)
+	{
+		if (model.tanque1.bullets[i].IsAlive)
+		{
+			glPushMatrix();
+			desenhaBullet(model.tanque1.bullets[i]);
+			glPopMatrix();
+		}
+	}
+	glPopMatrix();
+
+	glPushMatrix();
+	desenhaTanque(model.tanque2); //player1 window2
+
+	for (i = 0; i < NUM_BULLETS; i++)
+	{
+		if (model.tanque2.bullets[i].IsAlive)
+		{
+			glPushMatrix();
+			desenhaBullet(model.tanque2.bullets[i]);
+			glPopMatrix();
+		}
+	}
+	glPopMatrix();
+}
+
 
 /////////////////////////////////////
-//navigateSubwindow
-
-//void motionNavigateSubwindow(int x, int y)
-//{
-//
-//}
-//
-//
-//void mouseNavigateSubwindow(int button, int estado, int x, int y)
-//{
-//
-//}
-
 
 void setPlayerSubwindowCamera(Tanque *t)
 {
@@ -753,48 +780,19 @@ void setPlayerSubwindowCamera(Tanque *t)
 
 void displayPlayer1Subwindow()
 {
+	setPlayerSubwindowCamera(&model.tanque1);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glLoadIdentity();
 
 	setPlayerSubwindowCamera(&model.tanque1); //player1 window2
+
 	setLight();
 
-	glCallList(model.labirinto[JANELA_P1]);
-	glCallList(model.chao[JANELA_P1]);
+	glCallList(model.chao);
 
-	if (!estado.vista[JANELA_P1])
-	{
-		glPushMatrix();
-		desenhaTanque(model.tanque1, JANELA_P1); //player1 window2
-
-		int i;
-		for (i = 0; i < NUM_BULLETS; i++)
-		{
-			if (model.tanque1.bullets[i].IsAlive)
-			{
-				glPushMatrix();
-				desenhaBullet(model.tanque1.bullets[i]);
-				glPopMatrix();
-			}
-		}
-		glPopMatrix();
-	}
-
-	glPushMatrix();
-	desenhaTanque(model.tanque2, JANELA_P1); //player1 window2
-
-	int i;
-	for (i = 0; i < NUM_BULLETS; i++)
-	{
-		if (model.tanque2.bullets[i].IsAlive)
-		{
-			glPushMatrix();
-			desenhaBullet(model.tanque2.bullets[i]);
-			glPopMatrix();
-		}
-	}
-	glPopMatrix();
+	desenhaModels();
 
 	glutSwapBuffers();
 }
@@ -806,43 +804,12 @@ void displayPlayer2Subwindow()
 	glLoadIdentity();
 
 	setPlayerSubwindowCamera(&model.tanque2);  //player2 window2
+
 	setLight();
 
-	glCallList(model.labirinto[JANELA_P2]);
-	glCallList(model.chao[JANELA_P2]);
+	glCallList(model.chao);
 
-	if (!estado.vista[JANELA_P2])
-	{
-		glPushMatrix();
-		desenhaTanque(model.tanque2, JANELA_P2);    //player2 window2
-
-		int i;
-		for (i = 0; i < NUM_BULLETS; i++)
-		{
-			if (model.tanque2.bullets[i].IsAlive)
-			{
-				glPushMatrix();
-				desenhaBullet(model.tanque2.bullets[i]);
-				glPopMatrix();
-			}
-		}
-		glPopMatrix();
-	}
-
-	glPushMatrix();
-	desenhaTanque(model.tanque1, JANELA_P2);    //player1 window2
-
-	int i;
-	for (i = 0; i < NUM_BULLETS; i++)
-	{
-		if (model.tanque1.bullets[i].IsAlive)
-		{
-			glPushMatrix();
-			desenhaBullet(model.tanque1.bullets[i]);
-			glPopMatrix();
-		}
-	}
-	glPopMatrix();
+	desenhaModels();
 
 	glutSwapBuffers();
 }
@@ -1054,7 +1021,7 @@ void Timer(int value)
 	for (int i = 0; i < NUM_BULLETS; i++) {
 		if (detectaColisaoBala((&model.tanque1)->bullets[i], (&model.tanque1)->bullets[i].x, (&model.tanque1)->bullets[i].y, (model.tanque1))) {
 			printf("colision detected bullet %d\n", i); //FIXME return always true
-			//PlaySound("sounds\\impact.wav", NULL, SND_ASYNC | SND_FILENAME);
+														//PlaySound("sounds\\impact.wav", NULL, SND_ASYNC | SND_FILENAME);
 		}
 	}
 
@@ -1068,7 +1035,7 @@ void Timer(int value)
 		model.tanque1.y = ny1;
 
 		printf("wall colision detected \n"); //FIX ME detects colision middle map
-		//PlaySound("sounds\\wallhit.wav", NULL, SND_ASYNC | SND_FILENAME);
+											 //PlaySound("sounds\\wallhit.wav", NULL, SND_ASYNC | SND_FILENAME);
 	}
 
 	if (detectaColisaoTanque(model.tanque1.x, model.tanque1.y, model.tanque1, model.tanque2)) {
@@ -1246,9 +1213,9 @@ void SpecialKey(int key, int x, int y)
 	case GLUT_KEY_RIGHT: estado.teclas.right = GL_TRUE;
 		break;
 
-	case GLUT_KEY_F1: estado.vista[JANELA_P1] = !estado.vista[JANELA_P1];
+	case GLUT_KEY_F1:
 		break;
-	case GLUT_KEY_F2: estado.vista[JANELA_P2] = !estado.vista[JANELA_P2];
+	case GLUT_KEY_F2:
 		break;
 	case GLUT_KEY_F3: imprime_ajuda();
 		break;
@@ -1256,10 +1223,9 @@ void SpecialKey(int key, int x, int y)
 		break;
 
 	case GLUT_KEY_PAGE_UP:
-		if (estado.camera[JANELA_P1].fov > 60 || estado.camera[JANELA_P2].fov > 60)
+		if (estado.fov > 60 || estado.fov > 60)
 		{
-			estado.camera[JANELA_P1].fov--;
-			estado.camera[JANELA_P2].fov--;
+			estado.fov--;
 			glutSetWindow(estado.player1Subwindow);
 			reshapePlayer1Subwindow(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 			glutSetWindow(estado.player2Subwindow);
@@ -1268,10 +1234,9 @@ void SpecialKey(int key, int x, int y)
 		}
 		break;
 	case GLUT_KEY_PAGE_DOWN:
-		if (estado.camera[JANELA_P1].fov < 120 || estado.camera[JANELA_P2].fov < 120)
+		if (estado.fov < 120 || estado.fov < 120)
 		{
-			estado.camera[JANELA_P1].fov++;
-			estado.camera[JANELA_P2].fov++;
+			estado.fov++;
 			glutSetWindow(estado.player1Subwindow);
 			reshapePlayerSubwindow(JANELA_P1, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 			glutSetWindow(estado.player2Subwindow);
@@ -1303,18 +1268,10 @@ void SpecialKeyUp(int key, int x, int y)
 
 void createDisplayLists(int janelaID)
 {
-	model.labirinto[janelaID] = glGenLists(2);
-	glNewList(model.labirinto[janelaID], GL_COMPILE);
-	glPushAttrib(GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT);
-	desenhaLabirinto();
-	glPopAttrib();
-	glEndList();
-
-	model.chao[janelaID] = model.labirinto[janelaID] + 1;
-	glNewList(model.chao[janelaID], GL_COMPILE);
+	model.chao = glGenLists(1);
+	glNewList(model.chao, GL_COMPILE);
 	glPushAttrib(GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT);
 	desenhaChao(CHAO_DIMENSAO, model.texID[ID_TEXTURA_CHAO]);
-	desenhaSky(); //Temp
 	glPopAttrib();
 	glEndList();
 }
@@ -1441,29 +1398,16 @@ void createTextures(GLuint texID[])
 		exit(0);
 	}
 
-	if (read_JPEG_file(NOME_TEXTURA_TANQUE1, &image, &w, &h, &bpp))
+	if (read_JPEG_file(NOME_TEXTURA_PAREDE2, &image, &w, &h, &bpp))
 	{
-		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE1]);
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_PAREDE2]);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
 	}
 	else {
-		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE1);
-		exit(0);
-	}
-
-	if (read_JPEG_file(NOME_TEXTURA_TANQUE2, &image, &w, &h, &bpp))
-	{
-		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE2]);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
-	}
-	else {
-		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE2);
+		printf("Textura %s not Found\n", NOME_TEXTURA_PAREDE2);
 		exit(0);
 	}
 
@@ -1480,6 +1424,100 @@ void createTextures(GLuint texID[])
 		exit(0);
 	}
 
+	if (read_JPEG_file(NOME_TEXTURA_SKY_NIGHT, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_SKY_NIGHT]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_SKY_NIGHT);
+		exit(0);
+	}
+
+	// Tanque
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE_HEXA, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE_HEXA]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE_HEXA);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE_CAMO, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE_CAMO]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE_CAMO);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE_DESERT, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE_DESERT]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE_DESERT);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE_STRIPE, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE_STRIPE]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE_STRIPE);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE_TIGER, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE_TIGER]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE_TIGER);
+		exit(0);
+	}
+
+	if (read_JPEG_file(NOME_TEXTURA_TANQUE_TIGER2, &image, &w, &h, &bpp))
+	{
+		glBindTexture(GL_TEXTURE_2D, texID[ID_TEXTURA_TANQUE_TIGER2]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, w, h, GL_RGB, GL_UNSIGNED_BYTE, image);
+	}
+	else {
+		printf("Textura %s not Found\n", NOME_TEXTURA_TANQUE_TIGER2);
+		exit(0);
+	}
+
+
 	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
@@ -1490,8 +1528,8 @@ void initModel()
 	model.parado = GL_FALSE;
 	model.andar = GL_FALSE;
 	model.xMouse = model.yMouse = -1;
-	model.tanque1.skin = ID_TEXTURA_TANQUE1;
-	model.tanque2.skin = ID_TEXTURA_TANQUE2;
+	model.tanque1.skin = ID_TEXTURA_TANQUE_HEXA;
+	model.tanque2.skin = ID_TEXTURA_TANQUE_CAMO;
 
 	estado.debug = DEBUG;
 	estado.menuActivo = GL_FALSE;
@@ -1500,12 +1538,9 @@ void initModel()
 	estado.teclas.a = estado.teclas.w = estado.teclas.s = estado.teclas.d = \
 		estado.teclas.up = estado.teclas.down = estado.teclas.left = estado.teclas.right = GL_FALSE;
 
-	estado.camera[0].fov = 100;
-	estado.camera[1].fov = 100;
+	estado.fov = 100;
 
 	estado.localViewer = 1;
-	estado.vista[JANELA_P1] = 0;
-	estado.vista[JANELA_P2] = 0;
 }
 
 void init()
@@ -1576,7 +1611,6 @@ int main(int argc, char **argv)
 	setLight();
 	setMaterial();
 
-	//createTextures(model.texID[JANELA_P1]);
 	createTextures(model.texID);
 	createDisplayLists(JANELA_P1);
 
@@ -1598,7 +1632,6 @@ int main(int argc, char **argv)
 	setLight();
 	setMaterial();
 
-	//createTextures(model.texID[JANELA_P2]);
 	createTextures(model.texID);
 	createDisplayLists(JANELA_P2);
 
