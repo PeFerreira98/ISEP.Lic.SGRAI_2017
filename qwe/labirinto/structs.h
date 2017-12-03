@@ -4,7 +4,8 @@
 #include "const.h"
 
 typedef struct {
-	GLboolean   w, a, s, d, up, down, left, right, espaco;
+	GLboolean   w, a, s, d, t, f, g, h, espaco;
+	GLboolean   i, j, k, l, up, down, left, right, score;
 }Teclas;
 
 typedef struct {
@@ -127,6 +128,8 @@ typedef struct {
 	GLuint		    powerUpRotation = 0;
 	GLuint			labirinto[NUM_JANELAS];
 	GLuint			chao[NUM_JANELAS];
+	GLuint			skybox[NUM_JANELAS];
+
 	GLuint			xMouse;
 	GLuint			yMouse;
 	GLboolean		andar;
