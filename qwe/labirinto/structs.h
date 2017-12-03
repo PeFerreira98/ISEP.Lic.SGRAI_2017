@@ -80,6 +80,7 @@ typedef struct {
 	GLboolean   debug;
 	GLboolean   ortho;
 	GLboolean	dia;
+	GLboolean   nevoeiro;
 }Estado;
 
 typedef struct {

@@ -694,6 +694,22 @@ void desenhaLabirinto()
 	}
 }
 
+void desenhaNevoeiro() {
+	GLfloat fogColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+
+	if (estado.nevoeiro) {
+		glFogi(GL_FOG_MODE, GL_EXP2);        // Fog Mode
+		glFogfv(GL_FOG_COLOR, fogColor);            // Set Fog Color
+		glFogf(GL_FOG_DENSITY, 0.25f);              // How Dense Will The Fog Be
+		glHint(GL_FOG_HINT, GL_DONT_CARE);          // Fog Hint Value
+		glFogf(GL_FOG_START, 1.0f);             // Fog Start Depth
+		glFogf(GL_FOG_END, 10.0f);               // Fog End Depth
+		glEnable(GL_FOG);
+	}
+	else {
+		glDisable(GL_FOG);
+	}
+}
 
 void desenhaChao()
 {
@@ -767,6 +783,10 @@ void desenhaModels()
 			glPopMatrix();
 		}
 	}
+	glPopMatrix();
+
+	glPushMatrix();
+	desenhaNevoeiro();
 	glPopMatrix();
 }
 
@@ -1228,6 +1248,8 @@ void SpecialKey(int key, int x, int y)
 	case GLUT_KEY_F3: imprime_ajuda();
 		break;
 	case GLUT_KEY_F4: estado.localViewer = !estado.localViewer;
+		break;
+	case GLUT_KEY_F5: estado.nevoeiro = !estado.nevoeiro;
 		break;
 
 	case GLUT_KEY_PAGE_UP:
