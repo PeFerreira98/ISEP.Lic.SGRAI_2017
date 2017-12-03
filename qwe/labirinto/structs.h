@@ -28,7 +28,7 @@ typedef struct {
 // almighty tank
 typedef struct {
 	// Posicao inicial
-	//GLfloat		spawnX, spawnY;
+	GLfloat		spawnX, spawnY;
 
 	// Posicao atual
 	GLfloat     x, y;
@@ -137,6 +137,7 @@ typedef struct {
 	GLboolean		parado;
 	Mapa			mapa;
 	GLfloat light_pos[4] = { MAZE_HEIGHT,  MAZE_HEIGHT, 10, 1 };
+
 
 
 }Modelo;

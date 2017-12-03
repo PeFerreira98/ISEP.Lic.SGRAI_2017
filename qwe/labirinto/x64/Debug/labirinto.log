@@ -1,0 +1,52 @@
+﻿  utils.cpp
+  tank.cpp
+  studio_utils.cpp
+  studio_render.cpp
+  mdlviewer.cpp
+  math.cpp
+  main.cpp
+c:\program files (x86)\windows kits\10\include\10.0.15063.0\shared\minwindef.h(127): warning C4005: 'CALLBACK': macro redefinition
+  c:\glut\gl\glut.h(34): note: see previous definition of 'CALLBACK'
+c:\users\mitsu\source\repos\sgrai-17-18\qwe\labirinto\main.cpp(144): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+  readjpeg.c
+main.obj : error LNK2019: unresolved external symbol __glutInitWithExit referenced in function glutInit_ATEXIT_HACK
+main.obj : error LNK2019: unresolved external symbol glutInitDisplayMode referenced in function main
+main.obj : error LNK2019: unresolved external symbol glutInitWindowPosition referenced in function main
+main.obj : error LNK2019: unresolved external symbol glutInitWindowSize referenced in function main
+main.obj : error LNK2019: unresolved external symbol glutMainLoop referenced in function main
+main.obj : error LNK2019: unresolved external symbol __glutCreateWindowWithExit referenced in function glutCreateWindow_ATEXIT_HACK
+main.obj : error LNK2019: unresolved external symbol glutCreateSubWindow referenced in function main
+main.obj : error LNK2019: unresolved external symbol glutPostRedisplay referenced in function "void __cdecl redisplayAll(void)" (?redisplayAll@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol glutSwapBuffers referenced in function "void __cdecl displayMainWindow(void)" (?displayMainWindow@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol glutGetWindow referenced in function "void __cdecl init(void)" (?init@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol glutSetWindow referenced in function "void __cdecl Key(unsigned char,int,int)" (?Key@@YAXEHH@Z)
+main.obj : error LNK2019: unresolved external symbol glutPositionWindow referenced in function "void __cdecl reshapeMainWindow(int,int)" (?reshapeMainWindow@@YAXHH@Z)
+main.obj : error LNK2019: unresolved external symbol glutReshapeWindow referenced in function "void __cdecl reshapeMainWindow(int,int)" (?reshapeMainWindow@@YAXHH@Z)
+main.obj : error LNK2019: unresolved external symbol glutDisplayFunc referenced in function main
+main.obj : error LNK2019: unresolved external symbol glutReshapeFunc referenced in function main
+main.obj : error LNK2019: unresolved external symbol glutKeyboardFunc referenced in function main
+main.obj : error LNK2019: unresolved external symbol glutTimerFunc referenced in function "void __cdecl Timer(int)" (?Timer@@YAXH@Z)
+main.obj : error LNK2019: unresolved external symbol glutSpecialFunc referenced in function main
+main.obj : error LNK2019: unresolved external symbol glutKeyboardUpFunc referenced in function main
+main.obj : error LNK2019: unresolved external symbol glutSpecialUpFunc referenced in function main
+main.obj : error LNK2019: unresolved external symbol glutGet referenced in function "void __cdecl SpecialKey(int,int,int)" (?SpecialKey@@YAXHHH@Z)
+mdlviewer.obj : error LNK2001: unresolved external symbol glutGet
+main.obj : error LNK2019: unresolved external symbol glutStrokeCharacter referenced in function "void __cdecl strokeCenterString(char *,double,double,double,double)" (?strokeCenterString@@YAXPEADNNNN@Z)
+main.obj : error LNK2019: unresolved external symbol glutStrokeLength referenced in function "void __cdecl strokeCenterString(char *,double,double,double,double)" (?strokeCenterString@@YAXPEADNNNN@Z)
+main.obj : error LNK2019: unresolved external symbol glutSolidSphere referenced in function "void __cdecl desenhaBullet(struct Bullet)" (?desenhaBullet@@YAXUBullet@@@Z)
+main.obj : error LNK2019: unresolved external symbol glutWireCube referenced in function "void __cdecl desenhaLuz(float * const)" (?desenhaLuz@@YAXQEAM@Z)
+main.obj : error LNK2019: unresolved external symbol glutSolidOctahedron referenced in function "void __cdecl desenhaCasa(float,float)" (?desenhaCasa@@YAXMM@Z)
+main.obj : error LNK2019: unresolved external symbol auxDIBImageLoadA referenced in function "struct _AUX_RGBImageRec * __cdecl LoadBMP(char *)" (?LoadBMP@@YAPEAU_AUX_RGBImageRec@@PEAD@Z)
+readjpeg.obj : error LNK2019: unresolved external symbol jpeg_std_error referenced in function read_JPEG_file
+readjpeg.obj : error LNK2019: unresolved external symbol jpeg_CreateDecompress referenced in function read_JPEG_file
+readjpeg.obj : error LNK2019: unresolved external symbol jpeg_destroy_decompress referenced in function read_JPEG_file
+readjpeg.obj : error LNK2019: unresolved external symbol jpeg_stdio_src referenced in function read_JPEG_file
+readjpeg.obj : error LNK2019: unresolved external symbol jpeg_read_header referenced in function read_JPEG_file
+readjpeg.obj : error LNK2019: unresolved external symbol jpeg_start_decompress referenced in function read_JPEG_file
+readjpeg.obj : error LNK2019: unresolved external symbol jpeg_read_scanlines referenced in function read_JPEG_file
+readjpeg.obj : error LNK2019: unresolved external symbol jpeg_finish_decompress referenced in function read_JPEG_file
+C:\GLUT\glut32.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\GLAux\glaux.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\GLAux\libjpeg.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Mitsu\source\repos\sgrai-17-18\qwe\x64\Debug\projeto.exe : fatal error LNK1120: 35 unresolved externals

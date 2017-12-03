@@ -100,6 +100,9 @@
 #define COMPRIMENTO_TORRE   0.28571
 #define ALTURA_TORRE        0.07142
 
+#define METADE_BASE  COMPRIMENTO_BASE/2
+#define METADE_LARGURA_BASE LARGURA_BASE / 2
+#define METADE_ALTURA (ALTURA_TORRE+ALTURA_BASE)/2
 
 #define COMPRIMENTO_CANHAO  0.57142
 #define RAIO_CANHAO         0.05714
@@ -154,14 +157,14 @@
 #define K					0.1
 
 #define MIN_VEL				0
-#define ACCEL_TANQUE		0.08
+#define ACCEL_TANQUE		0.01
 #define DECEL_TANQUE		0.03
-#define VEL_ROTACAO			2
-#define VEL_ROTACAO_TORRE	2
+#define VEL_ROTACAO			1
+#define VEL_ROTACAO_TORRE	1
 #define VEL_ROTACAO_CANHAO	2
 #define VEL_ROTACAO_RODAS	5
 #define VEL_BULLET			2.5
 
-#define MAX_VEL				0.3
+#define MAX_VEL				0.001
 #define MAX_ANG_CANHAO		60
 #define MIN_ANG_CANHAO		0

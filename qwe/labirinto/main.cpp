@@ -157,7 +157,7 @@ void strokeCenterString(char *str, double x, double y, double z, double s)
 GLboolean detectaColisaoBala(Bullet b, GLfloat nx, GLfloat nz, Tanque t)
 {
 
-	if (model.mapa.mapa[(int)(nx + 9 + 0.6)][(int)(nz + 9 + 0.6)] >= 'W') {
+	if (model.mapa.mapa[(int)(nx + (MAZE_HEIGHT/2) + 1)][(int)(nz + (MAZE_WIDTH/2) + 1)] >= 'W') {
 		b.IsAlive = false;
 
 		return GL_TRUE;
@@ -196,13 +196,13 @@ GLboolean detectaColisaoBala(Bullet b, GLfloat nx, GLfloat nz, Tanque t)
 }
 
 
-GLboolean detectaColisaoTanque(GLfloat nx, GLfloat nz, Tanque t)
+GLboolean detectaColisaoTanque(GLfloat nx, GLfloat ny, Tanque t, Tanque t1)
 {
-	if (model.mapa.mapa[(int)(nx + 9 + 0.6)][(int)(nz + 9 + 0.6)] >= 'W') {
+	if (model.mapa.mapa[(int)(nx + 9 + 1)][(int)(ny + 9+1)] >= 'W' || model.mapa.mapa[(int)(nx + 9 + 1)][(int)(ny + 9 + 1)] >= 'w') {
 
 
 		return GL_TRUE;
-	}/*
+	}
 	 else if (t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) < t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
 	 && t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x + (METADE_BASE * cos(RAD(t1.direccao + t1.angTorre + 90)))))
 	 && t.x + (METADE_BASE * cos(RAD(t.direccao + t.angTorre + 90) > t1.x - (METADE_LARGURA_BASE * sin(RAD(t1.direccao + t1.angTorre + 90)))
@@ -247,7 +247,7 @@ GLboolean detectaColisaoTanque(GLfloat nx, GLfloat nz, Tanque t)
 
 	 ) {
 	 return GL_TRUE;
-	 }*/
+	 }
 
 	return GL_FALSE;
 }
@@ -804,7 +804,7 @@ void displayMainWindow()
 
 void Timer(int value)
 {
-	GLfloat nx = 0, ny = 0, nz = 0;
+	GLfloat nx = 0, ny = 0, nz = 0, nx1 = 0, ny1 = 0, nz1 = 0;
 	GLboolean andar = GL_FALSE;
 
 	GLuint curr = glutGet(GLUT_ELAPSED_TIME);
@@ -885,9 +885,17 @@ void Timer(int value)
 		(&model.tanque1)->IsSpeedBoosted = model.tanque1.speedBoostCounter <= 0;
 	}
 
+
 	nx = model.tanque1.x;
 	ny = model.tanque1.y;
+
 	updateTank(&model.tanque1);
+
+
+	nx1 = model.tanque2.x;
+	ny1 = model.tanque2.y;
+	updateTank(&model.tanque2);
+
 
 
 	//Colisao Bullet
@@ -895,11 +903,21 @@ void Timer(int value)
 		detectaColisaoBala((&model.tanque1)->bullets[i], (&model.tanque1)->bullets[i].x, (&model.tanque1)->bullets[i].y, (model.tanque1));
 	}
 
+	for (int i = 0; i < NUM_BULLETS; i++) {
+		detectaColisaoBala((&model.tanque2)->bullets[i], (&model.tanque2)->bullets[i].x, (&model.tanque2)->bullets[i].y, (model.tanque2));
+	}
+
 	//Colisao Tanque
-	if (detectaColisaoTanque(model.tanque1.x, model.tanque1.y, model.tanque1)) {
+	if (detectaColisaoTanque(model.tanque1.x, model.tanque1.y, model.tanque1, model.tanque2)) {
 
 		model.tanque1.x = nx;
 		model.tanque1.y = ny;
+	}
+
+	if (detectaColisaoTanque(model.tanque1.x, model.tanque1.y, model.tanque1, model.tanque2)) {
+
+		model.tanque2.x = nx1;
+		model.tanque2.y = ny1;
 	}
 
 
@@ -1275,6 +1293,8 @@ void init()
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_NORMALIZE);  // por causa do Scale
 
+	
+
 	if (glutGetWindow() == estado.mainWindow)
 		glClearColor(0.8f, 0.8f, 0.8f, 0.0f);
 	else
@@ -1315,6 +1335,10 @@ int main(int argc, char **argv)
 	// Player 1 Window
 	// criar a sub window player 1
 	estado.player1Subwindow = glutCreateSubWindow(estado.mainWindow, 400 + GAP, GAP, 400, 800);
+	model.tanque1.spawnX = 5;
+	model.tanque1.spawnY = 5;
+	model.tanque1.x = model.tanque1.spawnX;
+	model.tanque1.y = model.tanque1.spawnY;
 
 	init();
 	setLight();
