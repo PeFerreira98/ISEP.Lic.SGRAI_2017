@@ -124,7 +124,7 @@
 #define RAIO_CANHAO         0.05714
 
 #define RAIO_ESCUDO			0.6
-#define RAIO_BULLET			0.2
+#define RAIO_BULLET			0.1
 
 
 

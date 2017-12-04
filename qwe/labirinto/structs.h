@@ -79,6 +79,7 @@ typedef struct {
 	GLboolean   menuActivo;
 	GLboolean   debug;
 	GLboolean   ortho;
+
 	GLboolean	dia;
 	GLboolean   nevoeiro;
 }Estado;
@@ -88,14 +89,12 @@ typedef struct {
 
 	GLuint			chao;
 
-	GLuint			xMouse;
-	GLuint			yMouse;
-	GLboolean		andar;
 	GLuint			prev;
 	Tanque			tanque1;
 	Tanque			tanque2;
 	GLboolean		parado;
 	GLuint			powerUpRotation;
+
 	GLfloat light_pos[4] = { MAZE_HEIGHT,  MAZE_HEIGHT, 15, 1 };
 
 	char mapa[MAZE_HEIGHT][MAZE_WIDTH + 1] = {
@@ -170,10 +169,10 @@ typedef struct {
 		" W                                                                                                W ",
 		" W                                                                                                W ",
 		" W                                                                                                W ",
-		" W                                                                                                W ",
-		" W                                                                                                W ",
-		" W                                                                                                W ",
-		" W                                                                                                W ",
+		" W                               Hhhhhhhhh                                                        W ",
+		" W                               hhhhhhhhh                                                        W ",
+		" W                               hhhhhhhhh                                                        W ",
+		" W                               hhhhhhhhh                                                        W ",
 		" W                                                                                                W ",
 		" W                                                                         V                      W ",
 		" W                                                                                                W ",

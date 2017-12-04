@@ -968,12 +968,23 @@ void Timer(int value)
 {
 	GLfloat nx1 = 0, ny1 = 0, nz1 = 0;
 	GLfloat nx2 = 0, ny2 = 0, nz2 = 0;
-	GLboolean andar = GL_FALSE;
-
-	GLuint curr = glutGet(GLUT_ELAPSED_TIME);
 
 	glutTimerFunc(estado.delayMovimento, Timer, 0);
-	model.prev = curr;
+
+	model.prev++;
+	if (model.prev % 60000 == 0)
+	{
+		if (estado.dia)
+			if (estado.nevoeiro)
+				estado.dia = false;
+			else
+				estado.nevoeiro = true;
+		else
+			if (estado.nevoeiro)
+				estado.nevoeiro = false;
+			else
+				estado.dia = true;
+	}
 
 	if (model.powerUpRotation++ == 360) model.powerUpRotation = 0;
 
@@ -1247,9 +1258,9 @@ void SpecialKey(int key, int x, int y)
 		break;
 	case GLUT_KEY_F3: imprime_ajuda();
 		break;
-	case GLUT_KEY_F4: estado.localViewer = !estado.localViewer;
+	case GLUT_KEY_F4:
 		break;
-	case GLUT_KEY_F5: estado.nevoeiro = !estado.nevoeiro;
+	case GLUT_KEY_F5:
 		break;
 
 	case GLUT_KEY_PAGE_UP:
@@ -1358,7 +1369,7 @@ void createTextures(GLuint texID[])
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 
 		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, TextureImage[0]->sizeX, TextureImage[0]->sizeY, GL_RGB, GL_UNSIGNED_BYTE, TextureImage[0]->data);
-	}
+}
 #else
 	if (read_JPEG_file(NOME_TEXTURA_CUBOS, &image, &w, &h, &bpp))
 	{
@@ -1556,8 +1567,6 @@ void createTextures(GLuint texID[])
 void initModel()
 {
 	model.parado = GL_FALSE;
-	model.andar = GL_FALSE;
-	model.xMouse = model.yMouse = -1;
 	model.tanque1.skin = ID_TEXTURA_TANQUE_HEXA;
 	model.tanque2.skin = ID_TEXTURA_TANQUE_CAMO;
 
